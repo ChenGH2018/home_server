@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.shopaudit.ShopAuditMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    t_shop_audit
+    </sql>
+
+
+    <sql id="Field">
+            shop_complete_id,
+            application_person,
+            application_time,
+            application_description,
+            audit_status,
+            audit_opinion,
+            audit_time,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="ShopAudit">
+        <id column="id" property="id"/>
+        <result column="shop_complete_id" property="shopCompleteId"/>
+        <result column="application_person" property="applicationPerson"/>
+        <result column="application_time" property="applicationTime"/>
+        <result column="application_description" property="applicationDescription"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="audit_opinion" property="auditOpinion"/>
+        <result column="audit_time" property="auditTime"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="ShopAudit">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{shopCompleteId},
+        #{applicationPerson},
+        #{applicationTime},
+        #{applicationDescription},
+        #{auditStatus},
+        #{auditOpinion},
+        #{auditTime},
+    #{id}
+        )
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteOne" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where id = #{value}
+    </delete>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="ShopAudit">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="shopCompleteId != null">, shop_complete_id=#{shopCompleteId}</if>
+        <if test="applicationPerson != null">, application_person=#{applicationPerson}</if>
+        <if test="applicationTime != null">, application_time=#{applicationTime}</if>
+        <if test="applicationDescription != null">, application_description=#{applicationDescription}</if>
+        <if test="auditStatus != null">, audit_status=#{auditStatus}</if>
+        <if test="auditOpinion != null">, audit_opinion=#{auditOpinion}</if>
+        <if test="auditTime != null">, audit_time=#{auditTime}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="ShopAudit" resultType="ShopAudit">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="shopCompleteId != null">AND shop_complete_id=#{shopCompleteId}</if>
+            <if test="applicationPerson != null">AND application_person=#{applicationPerson}</if>
+            <if test="applicationTime != null">AND application_time=#{applicationTime}</if>
+            <if test="applicationDescription != null">AND application_description=#{applicationDescription}</if>
+            <if test="auditStatus != null">AND audit_status=#{auditStatus}</if>
+            <if test="auditOpinion != null">AND audit_opinion=#{auditOpinion}</if>
+            <if test="auditTime != null">AND audit_time=#{auditTime}</if>
+            <if test="id != null">AND id=#{id}</if>
+        </where>
+    </select>
+
+    <!--条件查询-->
+    <select id="getShopAuditByPage" parameterType="Page" resultType="ShopAudit">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="pd.eneity.shopCompleteId != null">AND shop_complete_id=#{pd.ShopAuditMappereneity.shopCompleteId}</if>
+            <if test="pd.eneity.applicationPerson != null">AND application_person=#{pd.eneity.applicationPerson}</if>
+            <if test="pd.eneity.applicationTime != null">AND application_time=#{pd.eneity.applicationTime}</if>
+            <if test="pd.eneity.applicationDescription != null">AND application_description=#{pd.eneity.applicationDescription}</if>
+            <if test="pd.eneity.auditStatus != null">AND audit_status=#{pd.eneity.auditStatus}</if>
+            <if test="pd.eneity.auditOpinion != null">AND audit_opinion=#{pd.eneity.auditOpinion}</if>
+            <if test="pd.eneity.auditTime != null">AND audit_time=#{pd.eneity.auditTime}</if>
+            <if test="pd.eneity.id != null">AND id=#{pd.eneity.id}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="ShopAudit">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.shopCompleteId}
+            #{t.applicationPerson}
+            #{t.applicationTime}
+            #{t.applicationDescription}
+            #{t.auditStatus}
+            #{t.auditOpinion}
+            #{t.auditTime}
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量删除操作-->
+    <delete id="deleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+
+</mapper>

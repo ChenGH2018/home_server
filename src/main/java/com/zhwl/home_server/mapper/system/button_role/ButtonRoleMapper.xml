@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.system.button_role.ButtonRoleMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        button_role
+    </sql>
+
+    <sql id="Field">
+        button_id,
+        role_id,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="ButtonRole">
+        <id column="id" property="id"/>
+        <result column="button_id" property="buttonId"/>
+        <result column="role_id" property="roleId"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="saveByList" parameterType="ButtonRole">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.buttonId},
+            #{t.roleId},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+    
+    <select id="getButtonIdByRoleId" parameterType="String" resultType="String">
+        select button_id from <include refid="tableName"></include> where role_id = #{roleId}
+    </select>
+
+    <!--批量删除操作-->
+    <delete id="deleteByRoleId" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        role_id = #{roleId}
+    </delete>
+
+</mapper>

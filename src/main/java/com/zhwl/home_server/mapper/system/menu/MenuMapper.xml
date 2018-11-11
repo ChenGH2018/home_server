@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.system.menu.MenuMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        menu
+    </sql>
+
+    <sql id="Field">
+        menu_name,
+        url,
+        component,
+        icon_cls,
+        parent_id,
+        menu_order,
+        add_time,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="Menu">
+        <id column="id" property="id"/>
+        <result column="menu_name" property="menuName"/>
+        <result column="url" property="url"/>
+        <result column="component" property="component"/>
+        <result column="icon_cls" property="iconCls"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="menu_order" property="menuOrder"/>
+        <result column="add_time" property="addTime"/>
+        <collection property="roles" ofType="Role">
+            <id column="rid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+        <collection property="children" ofType="Menu">
+            <id column="id2" property="id"/>
+            <result column="menu_name2" property="menuName"/>
+            <result column="url2" property="url"/>
+            <result column="component2" property="component"/>
+            <result column="icon_cls2" property="iconCls"/>
+            <result column="parent_id2" property="parentId"/>
+            <result column="menu_order2" property="menuOrder"/>
+            <collection property="children" ofType="Menu">
+                <id column="id3" property="id"/>
+                <result column="menu_name3" property="menuName"/>
+                <result column="url3" property="url"/>
+                <result column="component3" property="component"/>
+                <result column="parent_id3" property="parentId"/>
+                <result column="icon_cls3" property="iconCls"/>
+                <result column="menu_order3" property="menuOrder"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="Menu">
+        <id column="id" property="id"/>
+        <result column="menu_name" property="menuName"/>
+        <collection property="buttons" ofType="Button">
+            <id column="bid" property="id"/>
+            <result column="button_name" property="buttonName"/>
+        </collection>
+    </resultMap>
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="Menu" resultMap="BaseResultMap">
+        select m.id,m.menu_name,m.url,m.component,m.icon_cls,m.parent_id,m.menu_order,m.add_time,r.id as rid,r.name
+        from <include refid="tableName"></include> as m
+        left join menu_role as mr on m.id=mr.menu_id
+        left join role as r on mr.role_id=r.id
+        <where>
+            <if test="menuName != null">AND m.menu_name=#{menuName}</if>
+            <if test="url != null">AND m.url=#{url}</if>
+            <if test="component != null">AND m.component=#{component}</if>
+            <if test="iconCls != null">AND m.icon_cls=#{iconCls}</if>
+            <if test="parentId != null">AND m.parent_id=#{parentId}</if>
+            <if test="menuOrder != null">AND m.menu_order=#{menuOrder}</if>
+            <if test="addTime != null">AND m.add_time=#{addTime}</if>
+            <if test="id != null">AND m.id=#{id}</if>
+        </where>
+        order by m.menu_order
+    </select>
+
+    <select id="menuTree" resultMap="BaseResultMap">
+        select m1.id,m1.menu_name,m1.parent_id,
+        m2.id as id2,m2.menu_name as menu_name2,m2.parent_id as parent_id2,
+        m3.id as id3,m3.menu_name as menu_name3,m3.parent_id as parent_id3
+        from menu m1,menu m2,menu m3 where m1.id=m2.parent_id and m2.id=m3.parent_id
+        order by m1.menu_order,m2.menu_order,m3.menu_order
+    </select>
+
+    <select id="selectBySysUserId" parameterType="String" resultMap="BaseResultMap">
+        select m1.id,m1.component,m1.icon_cls,m1.menu_name,
+        m2.component as component2,m2.icon_cls as icon_cls2,m2.menu_name as menu_name2
+        from menu m1,menu m2
+        where m1.id=m2.parent_id
+        and m1.id!=1 and m2.id in
+        (select mr.menu_id from sys_user_role as sur,menu_role as mr where sur.role_id=mr.role_id and sur.sys_user_id=#{userId})
+        order by m1.menu_order,m2.menu_order
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByPage" parameterType="Page" resultMap="BaseResultMap">
+        select <include refid="Field"></include>
+        from <include refid="tableName"></include>
+        <where>
+            <if test="pd.menuName != null">AND menu_name=#{pd.menuName}</if>
+            <if test="pd.url != null">AND url=#{pd.url}</if>
+            <if test="pd.component != null">AND component=#{pd.component}</if>
+            <if test="pd.iconCls != null">AND icon_cls=#{pd.iconCls}</if>
+            <if test="pd.parentId != null">AND parent_id=#{pd.parentId}</if>
+            <if test="pd.menuOrder != null">AND menu_order=#{pd.menuOrder}</if>
+            <if test="pd.addTime != null">AND add_time=#{pd.addTime}</if>
+            <if test="pd.id != null">AND id=#{pd.id}</if>
+        </where>
+        order by menu_order
+    </select>
+
+    <select id="getMenuButtons" resultMap="BaseResultMap1">
+        SELECT tb.id as bid,tb.button_name,tm.id,tm.menu_name
+        FROM menu as tm JOIN button as tb on tm.id = tb.menu_id
+    </select>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="Menu">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{menuName},
+        #{url},
+        #{component},
+        #{iconCls},
+        #{parentId},
+        #{menuOrder},
+        #{addTime},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="Menu">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="menuName != null">, menu_name=#{menuName}</if>
+        <if test="url != null">, url=#{url}</if>
+        <if test="component != null">, component=#{component}</if>
+        <if test="iconCls != null">, icon_cls=#{iconCls}</if>
+        <if test="parentId != null">, parent_id=#{parentId}</if>
+        <if test="menuOrder != null">, menu_order=#{menuOrder}</if>
+        <if test="addTime != null">, add_time=#{addTime}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--批量删除操作-->
+    <delete id="deleteByIds" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+        delete from menu_role where menu_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>

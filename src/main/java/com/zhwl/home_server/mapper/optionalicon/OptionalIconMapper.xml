@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.optionalicon.OptionalIconMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    t_optional_icon
+    </sql>
+
+
+    <sql id="Field">
+            name,
+            eabled,
+            add_time,
+            id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="OptionalIcon">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="eabled" property="eabled"/>
+        <result column="add_time" property="addTime"/>
+    </resultMap>
+
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="OptionalIcon" resultType="OptionalIcon">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="name != null">AND name=#{name}</if>
+            <if test="eabled != null">AND eabled=#{eabled}</if>
+            <if test="addTime != null">AND add_time=#{addTime}</if>
+            <if test="id != null">AND id=#{id}</if>
+        </where>
+    </select>
+
+
+</mapper>

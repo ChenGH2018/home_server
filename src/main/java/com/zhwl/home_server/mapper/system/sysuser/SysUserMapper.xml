@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.system.sysuser.SysUserMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        sys_user
+    </sql>
+
+    <sql id="Field">
+        name,
+        phone,
+        telephone,
+        address,
+        username,
+        password,
+        userface,
+        remark,
+        add_time,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="SysUser">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="telephone" property="telephone"/>
+        <result column="address" property="address"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="userface" property="userface"/>
+        <result column="remark" property="remark"/>
+        <result column="add_time" property="addTime"/>
+        <collection property="roles" ofType="Role" javaType="java.util.ArrayList">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="name_zh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="SysUser" resultMap="BaseResultMap">
+        select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
+        tr.name as rname,tr.name_zh,tr.id as rid
+        from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
+        left join role as tr on tr.id = tsur.role_id
+        <where>
+            <if test="name != null">AND tsu.name=#{name}</if>
+            <if test="phone != null">AND tsu.phone=#{phone}</if>
+            <if test="telephone != null">AND tsu.telephone=#{telephone}</if>
+            <if test="address != null">AND tsu.address=#{address}</if>
+            <if test="username != null">AND tsu.username=#{username}</if>
+            <if test="password != null">AND tsu.password=#{password}</if>
+            <if test="userface != null">AND tsu.userface=#{userface}</if>
+            <if test="remark != null">AND tsu.remark=#{remark}</if>
+            <if test="id != null">AND tsu.id=#{id}</if>
+        </where>
+        order by tsu.add_time
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByPage" parameterType="Page" resultMap="BaseResultMap">
+        select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
+        tr.name as rname,tr.name_zh,tr.id as rid
+        from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
+        left join role as tr on tr.id = tsur.role_id
+        <where>
+            <if test="pd.name != null">AND tsu.name=#{pd.name}</if>
+            <if test="pd.phone != null">AND tsu.phone=#{pd.phone}</if>
+            <if test="pd.telephone != null">AND tsu.telephone=#{pd.telephone}</if>
+            <if test="pd.address != null">AND tsu.address=#{pd.address}</if>
+            <if test="pd.username != null">AND tsu.username=#{pd.username}</if>
+            <if test="pd.password != null">AND tsu.password=#{pd.password}</if>
+            <if test="pd.userface != null">AND tsu.userface=#{pd.userface}</if>
+            <if test="pd.remark != null">AND tsu.remark=#{pd.remark}</if>
+            <if test="pd.id != null">AND tsu.id=#{pd.id}</if>
+        </where>
+        order by tsu.add_time
+    </select>
+
+    <!--验证用户名-->
+    <select id="loadUserByUsername" parameterType="String" resultMap="BaseResultMap">
+        select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.password,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
+        tr.name as rname,tr.name_zh,tr.id as rid
+        from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
+        left join role as tr on tr.id = tsur.role_id
+        where tsu.username = #{username}
+    </select>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="SysUser">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{name},
+        #{phone},
+        #{telephone},
+        #{address},
+        #{username},
+        #{password},
+        #{userface},
+        #{remark},
+        #{addTime},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="SysUser">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="name != null">, name=#{name}</if>
+        <if test="phone != null">, phone=#{phone}</if>
+        <if test="telephone != null">, telephone=#{telephone}</if>
+        <if test="address != null">, address=#{address}</if>
+        <if test="username != null">, username=#{username}</if>
+        <if test="password != null">, password=#{password}</if>
+        <if test="userface != null">, userface=#{userface}</if>
+        <if test="remark != null">, remark=#{remark}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--批量删除操作-->
+    <delete id="deleteByIds" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+
+        delete from sys_user_role where sys_user_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>

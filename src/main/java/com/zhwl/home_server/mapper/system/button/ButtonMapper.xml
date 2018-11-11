@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.system.button.ButtonMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    button
+    </sql>
+
+
+    <sql id="Field">
+            button_number,
+            button_name,
+            url,
+            request_method,
+            menu_id,
+            add_time,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="Button">
+        <id column="id" property="id"/>
+        <result column="button_number" property="buttonNumber"/>
+        <result column="button_name" property="buttonName"/>
+        <result column="url" property="url"/>
+        <result column="request_method" property="requestMethod"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="add_time" property="addTime"/>
+        <association property="menu" javaType="menu">
+            <id column="mid" property="id"></id>
+            <result column="menu_name" property="menuName"></result>
+        </association>
+        <collection property="roles" ofType="Role">
+            <id column="rid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="Button" resultMap="BaseResultMap">
+        select tb.id,tb.button_number,tb.button_name,tb.url,tb.request_method,menu_id,tb.add_time,
+        tm.id as mid,tm.menu_name,tr.id as rid,tr.name
+        from
+        <include refid="tableName"></include> as tb
+        left join menu as tm on tb.menu_id = tm.id
+        left join button_role as tbr on tb.id = tbr.button_id
+        left join role as tr on tbr.role_id = tr.id
+        <where>
+            <if test="buttonNumber != null">AND tb.button_number=#{buttonNumber}</if>
+            <if test="buttonName != null">AND button_name=#{buttonName}</if>
+            <if test="url != null">AND tb.url=#{url}</if>
+            <if test="requestMethod != null">AND tb.request_method=#{requestMethod}</if>
+            <if test="menuId != null">AND tb.menu_id=#{menuId}</if>
+            <if test="addTime != null">AND tb.add_time=#{addTime}</if>
+            <if test="id != null">AND tb.id=#{id}</if>
+        </where>
+        order by tb.add_time desc
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByPage" parameterType="Page" resultMap="BaseResultMap">
+        select tb.id,tb.button_number,tb.button_name,tb.url,tb.request_method,tb.menu_id,tb.add_time,
+        tm.id as mid,tm.menu_name
+        from
+        <include refid="tableName"></include> as tb
+        left join menu as tm on tb.menu_id = tm.id
+        <where>
+            <if test="pd.buttonNumber != null">AND tb.button_number=#{pd.buttonNumber}</if>
+            <if test="pd.buttonName != null">AND tb.button_name=#{pd.buttonName}</if>
+            <if test="pd.url != null">AND tb.url=#{pd.url}</if>
+            <if test="pd.requestMethod != null">AND tb.request_method=#{pd.requestMethod}</if>
+            <if test="pd.menuId != null">AND tb.menu_id=#{pd.menuId}</if>
+            <if test="pd.menuName!= null">AND tm.menu_name like CONCAT(CONCAT('%',#{pd.menuName}),'%')</if>
+            <if test="pd.addTime != null">AND tb.add_time=#{pd.addTime}</if>
+            <if test="pd.id != null">AND tb.id=#{pd.id}</if>
+        </where>
+        order by tb.add_time
+    </select>
+
+    <select id="selectButtonNumberBySysUserId" parameterType="String" resultType="String">
+        SELECT tb.button_number
+        FROM <include refid="tableName"></include> as tb
+        LEFT JOIN button_role as tbr on tb.id = tbr.button_id
+        LEFT JOIN sys_user_role as tsur on tbr.role_id = tsur.role_id
+        WHERE tsur.sys_user_id = #{userId}
+    </select>
+
+
+    <select id="exitByButtonNumber" parameterType="String" resultType="boolean">
+        select count(*)
+        from <include refid="tableName"></include>
+        where button_number=#{buttonNumber}
+    </select>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="Button">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{buttonNumber},
+        #{buttonName},
+        #{url},
+        #{requestMethod},
+        #{menuId},
+        #{addTime},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="Button">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="buttonNumber != null">, button_number=#{buttonNumber}</if>
+        <if test="buttonName != null">, button_name=#{buttonName}</if>
+        <if test="url != null">, url=#{url}</if>
+        <if test="requestMethod != null">, request_method=#{requestMethod}</if>
+        <if test="menuId != null">, menu_id=#{menuId}</if>
+        <if test="addTime != null">, add_time=#{addTime}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--批量删除操作-->
+    <delete id="deleteByIds" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+
+        delete from button_role where button_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

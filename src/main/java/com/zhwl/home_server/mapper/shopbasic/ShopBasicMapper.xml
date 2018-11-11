@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.shopbasic.ShopBasicMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    t_shop_basic
+    </sql>
+
+
+    <sql id="Field">
+            email,
+            country,
+            enterprise_name,
+            enterprise_address,
+            contact_person,
+            contact_phone,
+            is_freeze,
+            is_logout,
+            audit_status,
+            register_time,
+            sys_user_id,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="ShopBasic">
+        <id column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="country" property="country"/>
+        <result column="enterprise_name" property="enterpriseName"/>
+        <result column="enterprise_address" property="enterpriseAddress"/>
+        <result column="contact_person" property="contactPerson"/>
+        <result column="contact_phone" property="contactPhone"/>
+        <result column="is_freeze" property="isFreeze"/>
+        <result column="is_logout" property="isLogout"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="sys_user_id" property="sysUserId"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="ShopBasic">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{email},
+        #{country},
+        #{enterpriseName},
+        #{enterpriseAddress},
+        #{contactPerson},
+        #{contactPhone},
+        #{isFreeze},
+        #{isLogout},
+        #{auditStatus},
+        #{registerTime},
+        #{sysUserId},
+    #{id}
+        )
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteOne" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where id = #{value}
+    </delete>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="ShopBasic">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="email != null">, email=#{email}</if>
+        <if test="country != null">, country=#{country}</if>
+        <if test="enterpriseName != null">, enterprise_name=#{enterpriseName}</if>
+        <if test="enterpriseAddress != null">, enterprise_address=#{enterpriseAddress}</if>
+        <if test="contactPerson != null">, contact_person=#{contactPerson}</if>
+        <if test="contactPhone != null">, contact_phone=#{contactPhone}</if>
+        <if test="isFreeze != null">, is_freeze=#{isFreeze}</if>
+        <if test="isLogout != null">, is_logout=#{isLogout}</if>
+        <if test="auditStatus != null">, audit_status=#{auditStatus}</if>
+        <if test="registerTime != null">, register_time=#{registerTime}</if>
+        <if test="sysUserId != null">, sys_user_id=#{sysUserId}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="ShopBasic" resultType="ShopBasic">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="email != null">AND email=#{email}</if>
+            <if test="country != null">AND country=#{country}</if>
+            <if test="enterpriseName != null">AND enterprise_name=#{enterpriseName}</if>
+            <if test="enterpriseAddress != null">AND enterprise_address=#{enterpriseAddress}</if>
+            <if test="contactPerson != null">AND contact_person=#{contactPerson}</if>
+            <if test="contactPhone != null">AND contact_phone=#{contactPhone}</if>
+            <if test="isFreeze != null">AND is_freeze=#{isFreeze}</if>
+            <if test="isLogout != null">AND is_logout=#{isLogout}</if>
+            <if test="auditStatus != null">AND audit_status=#{auditStatus}</if>
+            <if test="registerTime != null">AND register_time=#{registerTime}</if>
+            <if test="sysUserId != null">AND sys_user_id=#{sysUserId}</if>
+            <if test="id != null">AND id=#{id}</if>
+        </where>
+    </select>
+
+    <!--条件查询-->
+    <select id="getShopBasicByPage" parameterType="Page" resultType="ShopBasic">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="pd.entity.email != null">AND email=#{pd.entity.email}</if>
+            <if test="pd.entity.country != null">AND country=#{pd.entity.country}</if>
+            <if test="pd.entity.enterpriseName != null">AND enterprise_name=#{pd.entity.enterpriseName}</if>
+            <if test="pd.entity.enterpriseAddress != null">AND enterprise_address=#{pd.entity.enterpriseAddress}</if>
+            <if test="pd.entity.contactPerson != null">AND contact_person=#{pd.entity.contactPerson}</if>
+            <if test="pd.entity.contactPhone != null">AND contact_phone=#{pd.entity.contactPhone}</if>
+            <if test="pd.entity.isFreeze != null">AND is_freeze=#{pd.entity.isFreeze}</if>
+            <if test="pd.entity.isLogout != null">AND is_logout=#{pd.entity.isLogout}</if>
+            <if test="pd.entity.auditStatus != null">AND audit_status=#{pd.entity.auditStatus}</if>
+            <if test="pd.entity.registerTime != null">AND register_time=#{pd.entity.registerTime}</if>
+            <if test="pd.entity.sysUserId != null">AND sys_user_id=#{pd.entity.sysUserId}</if>
+            <if test="pd.entity.id != null">AND id=#{pd.entity.id}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="ShopBasic">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.email}
+            #{t.country}
+            #{t.enterpriseName}
+            #{t.enterpriseAddress}
+            #{t.contactPerson}
+            #{t.contactPhone}
+            #{t.isFreeze}
+            #{t.isLogout}
+            #{t.auditStatus}
+            #{t.registerTime}
+            #{t.sysUserId}
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量删除操作-->
+    <delete id="deleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+
+</mapper>

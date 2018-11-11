@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.system.role.RoleMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        role
+    </sql>
+
+    <sql id="Field">
+        name,
+        name_zh,
+        add_time,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="name_zh" property="nameZh"/>
+        <result column="add_time" property="addTime"/>
+    </resultMap>
+
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="Role" resultMap="BaseResultMap">
+        select <include refid="Field"></include>
+        from <include refid="tableName"></include>
+        <where>
+            <if test="name != null">AND name=#{name}</if>
+            <if test="nameZh != null">AND name_zh=#{nameZh}</if>
+            <if test="id != null">AND id=#{id}</if>
+        </where>
+        order by add_time
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByPage" parameterType="Page" resultMap="BaseResultMap">
+        select <include refid="Field"></include>
+        from <include refid="tableName"></include>
+        <where>
+            <if test="pd.name != null">AND name=#{pd.name}</if>
+            <if test="pd.nameZh != null">AND name_zh=#{pd.nameZh}</if>
+            <if test="pd.id != null">AND id=#{pd.id}</if>
+        </where>
+        order by add_time
+    </select>
+
+    <select id="exitByName" parameterType="String" resultType="boolean">
+        select count(*)
+        from <include refid="tableName"></include>
+        where name=#{name}
+    </select>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="Role">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{name},
+        #{nameZh},
+        #{addTime},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="Role">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="name != null">, name=#{name}</if>
+        <if test="nameZh != null">, name_zh=#{nameZh}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--批量删除操作-->
+    <delete id="deleteByIds" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+
+        delete from sys_user_role where role_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+        delete from menu_role where role_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+        delete from button_role where role_id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+    </delete>
+
+
+</mapper>

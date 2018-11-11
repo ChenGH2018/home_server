@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    t_shop_complete
+    </sql>
+
+
+    <sql id="Field">
+            shop_basic_id,
+            shop_name,
+            company_homepage,
+            company_type,
+            business_registration_number,
+            unified_social_credit_code,
+            registered_address,
+            registered_capital,
+            establishment_date,
+            business_period_begins,
+            business_period_end,
+            fixed_telephone,
+            legal_representative,
+            business_license_url,
+        id
+    </sql>
+
+    <resultMap id="BaseResultMap" type="ShopComplete">
+        <id column="id" property="id"/>
+        <result column="shop_basic_id" property="shopBasicId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="company_homepage" property="companyHomepage"/>
+        <result column="company_type" property="companyType"/>
+        <result column="business_registration_number" property="businessRegistrationNumber"/>
+        <result column="unified_social_credit_code" property="unifiedSocialCreditCode"/>
+        <result column="registered_address" property="registeredAddress"/>
+        <result column="registered_capital" property="registeredCapital"/>
+        <result column="establishment_date" property="establishmentDate"/>
+        <result column="business_period_begins" property="businessPeriodBegins"/>
+        <result column="business_period_end" property="businessPeriodEnd"/>
+        <result column="fixed_telephone" property="fixedTelephone"/>
+        <result column="legal_representative" property="legalRepresentative"/>
+        <result column="business_license_url" property="businessLicenseUrl"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="ShopComplete">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        (
+        #{shopBasicId},
+        #{shopName},
+        #{companyHomepage},
+        #{companyType},
+        #{businessRegistrationNumber},
+        #{unifiedSocialCreditCode},
+        #{registeredAddress},
+        #{registeredCapital},
+        #{establishmentDate},
+        #{businessPeriodBegins},
+        #{businessPeriodEnd},
+        #{fixedTelephone},
+        #{legalRepresentative},
+        #{businessLicenseUrl},
+    #{id}
+        )
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteOne" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where id = #{value}
+    </delete>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="ShopComplete">
+        update
+        <include refid="tableName"></include>
+        set
+        id=#{id}
+        <if test="shopBasicId != null">, shop_basic_id=#{shopBasicId}</if>
+        <if test="shopName != null">, shop_name=#{shopName}</if>
+        <if test="companyHomepage != null">, company_homepage=#{companyHomepage}</if>
+        <if test="companyType != null">, company_type=#{companyType}</if>
+        <if test="businessRegistrationNumber != null">, business_registration_number=#{businessRegistrationNumber}</if>
+        <if test="unifiedSocialCreditCode != null">, unified_social_credit_code=#{unifiedSocialCreditCode}</if>
+        <if test="registeredAddress != null">, registered_address=#{registeredAddress}</if>
+        <if test="registeredCapital != null">, registered_capital=#{registeredCapital}</if>
+        <if test="establishmentDate != null">, establishment_date=#{establishmentDate}</if>
+        <if test="businessPeriodBegins != null">, business_period_begins=#{businessPeriodBegins}</if>
+        <if test="businessPeriodEnd != null">, business_period_end=#{businessPeriodEnd}</if>
+        <if test="fixedTelephone != null">, fixed_telephone=#{fixedTelephone}</if>
+        <if test="legalRepresentative != null">, legal_representative=#{legalRepresentative}</if>
+        <if test="businessLicenseUrl != null">, business_license_url=#{businessLicenseUrl}</if>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!--条件查询-->
+    <select id="selectBySelective" parameterType="ShopComplete" resultType="ShopComplete">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="shopBasicId != null">AND shop_basic_id=#{shopBasicId}</if>
+            <if test="shopName != null">AND shop_name=#{shopName}</if>
+            <if test="companyHomepage != null">AND company_homepage=#{companyHomepage}</if>
+            <if test="companyType != null">AND company_type=#{companyType}</if>
+            <if test="businessRegistrationNumber != null">AND business_registration_number=#{businessRegistrationNumber}</if>
+            <if test="unifiedSocialCreditCode != null">AND unified_social_credit_code=#{unifiedSocialCreditCode}</if>
+            <if test="registeredAddress != null">AND registered_address=#{registeredAddress}</if>
+            <if test="registeredCapital != null">AND registered_capital=#{registeredCapital}</if>
+            <if test="establishmentDate != null">AND establishment_date=#{establishmentDate}</if>
+            <if test="businessPeriodBegins != null">AND business_period_begins=#{businessPeriodBegins}</if>
+            <if test="businessPeriodEnd != null">AND business_period_end=#{businessPeriodEnd}</if>
+            <if test="fixedTelephone != null">AND fixed_telephone=#{fixedTelephone}</if>
+            <if test="legalRepresentative != null">AND legal_representative=#{legalRepresentative}</if>
+            <if test="businessLicenseUrl != null">AND business_license_url=#{businessLicenseUrl}</if>
+            <if test="id != null">AND id=#{id}</if>
+        </where>
+    </select>
+
+    <!--条件查询-->
+    <select id="getShopCompleteByPage" parameterType="Page" resultType="ShopComplete">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="pd.entity.shopBasicId != null">AND shop_basic_id=#{pd.entity.shopBasicId}</if>
+            <if test="pd.entity.shopName != null">AND shop_name=#{pd.entity.shopName}</if>
+            <if test="pd.entity.companyHomepage != null">AND company_homepage=#{pd.entity.companyHomepage}</if>
+            <if test="pd.entity.companyType != null">AND company_type=#{pd.companyType}</if>
+            <if test="pd.entity.businessRegistrationNumber != null">AND business_registration_number=#{pd.entity.businessRegistrationNumber}</if>
+            <if test="pd.entity.unifiedSocialCreditCode != null">AND unified_social_credit_code=#{pd.entity.unifiedSocialCreditCode}</if>
+            <if test="pd.entity.registeredAddress != null">AND registered_address=#{pd.entity.registeredAddress}</if>
+            <if test="pd.entity.registeredCapital != null">AND registered_capital=#{pd.entity.registeredCapital}</if>
+            <if test="pd.entity.establishmentDate != null">AND establishment_date=#{pd.entity.establishmentDate}</if>
+            <if test="pd.entity.businessPeriodBegins != null">AND business_period_begins=#{pd.entity.businessPeriodBegins}</if>
+            <if test="pd.entity.businessPeriodEnd != null">AND business_period_end=#{pd.entity.businessPeriodEnd}</if>
+            <if test="pd.entity.fixedTelephone != null">AND fixed_telephone=#{pd.entity.fixedTelephone}</if>
+            <if test="pd.entity.legalRepresentative != null">AND legal_representative=#{pd.entity.legalRepresentative}</if>
+            <if test="pd.entity.businessLicenseUrl != null">AND business_license_url=#{pd.entity.businessLicenseUrl}</if>
+            <if test="pd.entity.id != null">AND id=#{pd.entity.id}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="ShopComplete">
+        INSERT INTO
+        <include refid="tableName"></include>
+        (<include refid="Field"></include>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.shopBasicId}
+            #{t.shopName}
+            #{t.companyHomepage}
+            #{t.companyType}
+            #{t.businessRegistrationNumber}
+            #{t.unifiedSocialCreditCode}
+            #{t.registeredAddress}
+            #{t.registeredCapital}
+            #{t.establishmentDate}
+            #{t.businessPeriodBegins}
+            #{t.businessPeriodEnd}
+            #{t.fixedTelephone}
+            #{t.legalRepresentative}
+            #{t.businessLicenseUrl}
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量删除操作-->
+    <delete id="deleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+
+</mapper>
