@@ -23,7 +23,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public Integer save(ShopAudit shopAudit) {
-        if (Strings.isNullOrEmpty(shopAudit.getShopCompleteId())) throw new RuntimeException("商家ID不能为空");
+        if (Strings.isNullOrEmpty(shopAudit.getShopBasicId())) throw new RuntimeException("商家ID不能为空");
         return shopAuditMapper.save(shopAudit);
     }
 
@@ -48,7 +48,8 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public List<ShopAudit> selectBySelective(ShopAudit shopAudit) {
-        return shopAuditMapper.selectBySelective(shopAudit);
+        List<ShopAudit> shopAudits = shopAuditMapper.selectBySelective(shopAudit);
+        return shopAudits;
     }
 
     @Override

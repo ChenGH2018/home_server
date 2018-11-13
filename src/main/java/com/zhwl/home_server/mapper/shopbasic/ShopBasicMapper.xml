@@ -26,7 +26,7 @@
     </sql>
 
     <resultMap id="BaseResultMap" type="ShopBasic">
-        <id column="id" property="id"/>
+        <id column="sb_id" property="id"/>
         <result column="email" property="email"/>
         <result column="country" property="country"/>
         <result column="enterprise_name" property="enterpriseName"/>
@@ -38,6 +38,23 @@
         <result column="audit_status" property="auditStatus"/>
         <result column="register_time" property="registerTime"/>
         <result column="sys_user_id" property="sysUserId"/>
+        <association property="shopComplete" javaType="com.zhwl.home_server.bean.shopcomplete.ShopComplete" >
+            <id column="sc_id" property="id"/>
+            <result column="shop_basic_id" property="shopBasicId"/>
+            <result column="shop_name" property="shopName"/>
+            <result column="company_homepage" property="companyHomepage"/>
+            <result column="company_type" property="companyType"/>
+            <result column="business_registration_number" property="businessRegistrationNumber"/>
+            <result column="unified_social_credit_code" property="unifiedSocialCreditCode"/>
+            <result column="registered_address" property="registeredAddress"/>
+            <result column="registered_capital" property="registeredCapital"/>
+            <result column="establishment_date" property="establishmentDate"/>
+            <result column="business_period_begins" property="businessPeriodBegins"/>
+            <result column="business_period_end" property="businessPeriodEnd"/>
+            <result column="fixed_telephone" property="fixedTelephone"/>
+            <result column="legal_representative" property="legalRepresentative"/>
+            <result column="business_license_url" property="businessLicenseUrl"/>
+        </association>
     </resultMap>
 
     <!-- 新增-->
@@ -91,11 +108,14 @@
     </update>
 
     <!--条件查询-->
-    <select id="selectBySelective" parameterType="ShopBasic" resultType="ShopBasic">
-        select
-        <include refid="Field"></include>
+    <select id="selectBySelective" parameterType="ShopBasic" resultMap="ShopBasic">
+        select sb.email, sb.country, sb.enterprise_name, sb.enterprise_address, sb.contact_person, sb.contact_phone,
+        sb.is_freeze, sb.is_logout, sb.audit_status, sb.register_time, sb.sys_user_id, sb.id AS sb_id
+        <if test="isQueryComplete" >,sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,
+            sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id
+        </if>
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/> AS sb <if test="isQueryComplete">LEFT JOIN t_shop_complete AS sc ON sb.id = sc.shop_basic_id</if>
         <where>
             <if test="email != null">AND email=#{email}</if>
             <if test="country != null">AND country=#{country}</if>
@@ -113,11 +133,14 @@
     </select>
 
     <!--条件查询-->
-    <select id="getShopBasicByPage" parameterType="Page" resultType="ShopBasic">
-        select
-        <include refid="Field"></include>
+    <select id="getShopBasicByPage" parameterType="Page" resultMap="BaseResultMap">
+        select sb.email, sb.country, sb.enterprise_name, sb.enterprise_address, sb.contact_person, sb.contact_phone,
+                sb.is_freeze, sb.is_logout, sb.audit_status, sb.register_time, sb.sys_user_id, sb.id AS sb_id
+        <if test="pd.entity.isQueryComplete" >,sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,
+            sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id
+        </if>
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/> AS sb <if test="pd.entity.isQueryComplete">LEFT JOIN t_shop_complete AS sc ON sb.id = sc.shop_basic_id</if>
         <where>
             <if test="pd.entity.email != null">AND email=#{pd.entity.email}</if>
             <if test="pd.entity.country != null">AND country=#{pd.entity.country}</if>

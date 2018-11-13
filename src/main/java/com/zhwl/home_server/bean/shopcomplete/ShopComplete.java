@@ -1,5 +1,7 @@
 package com.zhwl.home_server.bean.shopcomplete;
 
+import com.zhwl.home_server.bean.shopaudit.ShopAudit;
+import com.zhwl.home_server.bean.shopbasic.ShopBasic;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -13,7 +15,6 @@ import java.util.Date;
 @Table(name = "t_shop_complete")
 public class ShopComplete {
 
-    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String shopBasicId;//商家基本信息外键
@@ -31,5 +32,12 @@ public class ShopComplete {
     private String legalRepresentative;//法人代表
     private String businessLicenseUrl;//营业执照
 
+    private boolean isQueryBasic;//是否关联查询基本信息
+    private boolean isQueryAudit;//是否关联查询审核信息
+
+    @ApiModelProperty(hidden = true)
+    private ShopBasic shopBasic;    //商家基本信息
+    @ApiModelProperty(hidden = true)
+    private ShopAudit shopAudit;    //商家审核信息
 
 }

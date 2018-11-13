@@ -11,7 +11,7 @@
 
 
     <sql id="Field">
-            shop_complete_id,
+            shop_basic_id,
             application_person,
             application_time,
             application_description,
@@ -24,7 +24,7 @@
 
     <resultMap id="BaseResultMap" type="ShopAudit">
         <id column="id" property="id"/>
-        <result column="shop_complete_id" property="shopCompleteId"/>
+        <result column="shop_basic_id" property="shopBasicId"/>
         <result column="application_person" property="applicationPerson"/>
         <result column="application_time" property="applicationTime"/>
         <result column="application_description" property="applicationDescription"/>
@@ -41,7 +41,7 @@
         (<include refid="Field"></include>)
         VALUES
         (
-        #{shopCompleteId},
+        #{shopBasicId},
         #{applicationPerson},
         #{applicationTime},
         #{applicationDescription},
@@ -66,7 +66,7 @@
         <include refid="tableName"></include>
         set
         id=#{id}
-        <if test="shopCompleteId != null">, shop_complete_id=#{shopCompleteId}</if>
+        <if test="shopBasicId != null">, shop_basic_id=#{shopBasicId}</if>
         <if test="applicationPerson != null">, application_person=#{applicationPerson}</if>
         <if test="applicationTime != null">, application_time=#{applicationTime}</if>
         <if test="applicationDescription != null">, application_description=#{applicationDescription}</if>
@@ -85,7 +85,7 @@
         from
         <include refid="tableName"></include>
         <where>
-            <if test="shopCompleteId != null">AND shop_complete_id=#{shopCompleteId}</if>
+            <if test="shopBasicId != null">AND shop_basic_id=#{shopBasicId}</if>
             <if test="applicationPerson != null">AND application_person=#{applicationPerson}</if>
             <if test="applicationTime != null">AND application_time=#{applicationTime}</if>
             <if test="applicationDescription != null">AND application_description=#{applicationDescription}</if>
@@ -99,20 +99,19 @@
 
     <!--条件查询-->
     <select id="getShopAuditByPage" parameterType="Page" resultType="ShopAudit">
-        select
-        <include refid="Field"></include>
+        select sa.shop_basic_id, sa.application_person, sa.application_time, sa.application_description, sa.audit_status, sa.audit_opinion, sa.audit_time, sa.audit_result,id
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/> AS sa
         <where>
-            <if test="pd.eneity.shopCompleteId != null">AND shop_complete_id=#{pd.ShopAuditMappereneity.shopCompleteId}</if>
-            <if test="pd.eneity.applicationPerson != null">AND application_person=#{pd.eneity.applicationPerson}</if>
-            <if test="pd.eneity.applicationTime != null">AND application_time=#{pd.eneity.applicationTime}</if>
-            <if test="pd.eneity.applicationDescription != null">AND application_description=#{pd.eneity.applicationDescription}</if>
-            <if test="pd.eneity.auditStatus != null">AND audit_status=#{pd.eneity.auditStatus}</if>
-            <if test="pd.eneity.auditOpinion != null">AND audit_opinion=#{pd.eneity.auditOpinion}</if>
-            <if test="pd.eneity.auditTime != null">AND audit_time=#{pd.eneity.auditTime}</if>
-            <if test="pd.eneity.auditResult != null">AND audit_result=#{pd.eneity.auditResult}</if>
-            <if test="pd.eneity.id != null">AND id=#{pd.eneity.id}</if>
+            <if test="pd.entity.shopBasicId != null">AND sa.shop_basic_id=#{pd.entity.shopBasicId}</if>
+            <if test="pd.entity.applicationPerson != null">AND sa.application_person=#{pd.entity.applicationPerson}</if>
+            <if test="pd.entity.applicationTime != null">AND sa.application_time=#{pd.entity.applicationTime}</if>
+            <if test="pd.entity.applicationDescription != null">AND sa.application_description=#{pd.entity.applicationDescription}</if>
+            <if test="pd.entity.auditStatus != null">AND sa.audit_status=#{pd.entity.auditStatus}</if>
+            <if test="pd.entity.auditOpinion != null">AND sa.audit_opinion=#{pd.entity.auditOpinion}</if>
+            <if test="pd.entity.auditTime != null">AND sa.audit_time=#{pd.entity.auditTime}</if>
+            <if test="pd.entity.auditResult != null">AND sa.audit_result=#{pd.entity.auditResult}</if>
+            <if test="pd.entity.id != null">AND sa.id=#{pd.entity.id}</if>
         </where>
     </select>
 
@@ -124,7 +123,7 @@
         VALUES
         <foreach item="t" index="index" collection="list" separator=",">
             (
-            #{t.shopCompleteId},
+            #{t.shopBasicId},
             #{t.applicationPerson},
             #{t.applicationTime},
             #{t.applicationDescription},
