@@ -1,5 +1,6 @@
 package com.zhwl.home_server.bean.shopaudit;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Data
 @Table(name = "t_shop_audit")
 public class ShopAudit {
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String shopCompleteId;//申请商家ID
@@ -20,5 +22,5 @@ public class ShopAudit {
     private Integer auditStatus;//审核状态
     private String auditOpinion;//审核意见
     private Date auditTime;//审核时间
-
+    private Boolean auditResult;//审核结果
 }

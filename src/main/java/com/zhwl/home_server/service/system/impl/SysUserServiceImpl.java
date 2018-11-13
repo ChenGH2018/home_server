@@ -8,6 +8,7 @@ import com.zhwl.home_server.mapper.system.sysuser.SysUserMapper;
 import com.zhwl.home_server.service.system.SysUserRoleService;
 import com.zhwl.home_server.service.system.SysUserService;
 import com.zhwl.home_server.system.SysEnum;
+import com.zhwl.home_server.system.UserTypeEnum;
 import com.zhwl.home_server.util.SysUserUtil;
 import com.zhwl.home_server.util.UuidUtil;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -73,6 +74,11 @@ public class SysUserServiceImpl implements SysUserService {
         sysUser.setId(UuidUtil.get32UUID());
         sysUser.setUserface("http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg");
         sysUser.setAddTime(new Date());
+        //如果没有usertype则默认是系统用户（真正操作还会校验权限，所以没事）
+        if(null == sysUser.getUserType()) sysUser.setUserType(UserTypeEnum.SYSTEMUSER.getType());
+        sysUser.setIsFreeze(0);
+        sysUser.setIsLogout(0);
+        sysUser.setIsActivateEamil(0);
         return sysUserMapper.save(sysUser);
     }
 

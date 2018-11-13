@@ -3,8 +3,10 @@ package com.zhwl.home_server.service.shopcomplete.impl;
 import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shopcomplete.ShopComplete;
+import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shopcomplete.ShopCompleteService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,23 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Override
     public Integer save(ShopComplete shopComplete) {
+        shopCompleteNoNull(shopComplete);
         return shopCompleteMapper.save(shopComplete);
+    }
+
+    private void shopCompleteNoNull(@NonNull ShopComplete shopComplete) {
+        if(Strings.isNullOrEmpty(shopComplete.getShopBasicId())) throw new BaseException("商家基本ID不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getShopName())) throw new BaseException("店铺名不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getBusinessLicenseUrl())) throw new BaseException("营业执照不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getBusinessRegistrationNumber())) throw new BaseException("工商注册号");
+        if(Strings.isNullOrEmpty(shopComplete.getLegalRepresentative())) throw new BaseException("法人代表不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getRegisteredAddress())) throw new BaseException("注册地址不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getUnifiedSocialCreditCode())) throw new BaseException("统一社会信用代码");
+        if(Strings.isNullOrEmpty(shopComplete.getCompanyType())) throw new BaseException("公司类型不能为空");
+        if(null == shopComplete.getRegisteredCapital()) throw new BaseException("注册资本不能为空");
+        if(null == shopComplete.getEstablishmentDate()) throw new BaseException("成立日期不能为空");
+        if(null == shopComplete.getBusinessPeriodBegins()) throw new BaseException("营业期限开始日期不能为空");
+        if(null == shopComplete.getBusinessPeriodEnd()) throw new BaseException("营业期限结束日期不能为空");
     }
 
     @Override
@@ -32,7 +50,7 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Override
     public Integer updateBySelective(ShopComplete shopComplete) {
-        if(Strings.isNullOrEmpty(shopComplete.getId())) throw new RuntimeException("ID不能为空");
+        if(Strings.isNullOrEmpty(shopComplete.getId())) throw new RuntimeException("修改ID不能为空");
         return shopCompleteMapper.updateBySelective(shopComplete);
     }
 

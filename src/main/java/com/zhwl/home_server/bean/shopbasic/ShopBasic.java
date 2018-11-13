@@ -10,6 +10,7 @@ import java.util.Date;
 @Data
 @Table(name = "t_shop_basic")
 public class ShopBasic {
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String email;//邮箱地址

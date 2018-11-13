@@ -10,7 +10,10 @@ public class BaseException extends RuntimeException {
         super(message);
         this.code = code;
     }
-
+    public BaseException(String message) {
+        super(message);
+        this.code = null;
+    }
     public BaseException(SysEnum sysEnum) {
         super(sysEnum.getMsg());
         this.code = sysEnum.getCode();

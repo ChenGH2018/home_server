@@ -1,5 +1,6 @@
 package com.zhwl.home_server.bean.shopcomplete;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Id;
@@ -11,12 +12,14 @@ import java.util.Date;
 @Data
 @Table(name = "t_shop_complete")
 public class ShopComplete {
+
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String shopBasicId;//商家基本信息外键
     private String shopName;//店铺名称
     private String companyHomepage;//公司主页
-    private Integer companyType;//公司类型
+    private String companyType;//公司类型
     private String businessRegistrationNumber;//工商注册号
     private String unifiedSocialCreditCode;//统一社会信用代码
     private String registeredAddress;//注册地址

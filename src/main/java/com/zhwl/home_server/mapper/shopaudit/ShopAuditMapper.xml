@@ -18,6 +18,7 @@
             audit_status,
             audit_opinion,
             audit_time,
+            audit_result,
         id
     </sql>
 
@@ -30,6 +31,7 @@
         <result column="audit_status" property="auditStatus"/>
         <result column="audit_opinion" property="auditOpinion"/>
         <result column="audit_time" property="auditTime"/>
+        <result column="audit_result" property="auditResult"/>
     </resultMap>
 
     <!-- 新增-->
@@ -46,6 +48,7 @@
         #{auditStatus},
         #{auditOpinion},
         #{auditTime},
+        #{auditResult},
     #{id}
         )
     </insert>
@@ -70,6 +73,7 @@
         <if test="auditStatus != null">, audit_status=#{auditStatus}</if>
         <if test="auditOpinion != null">, audit_opinion=#{auditOpinion}</if>
         <if test="auditTime != null">, audit_time=#{auditTime}</if>
+        <if test="auditResult != null">, audit_result=#{auditResult}</if>
         WHERE
         id=#{id}
     </update>
@@ -88,6 +92,7 @@
             <if test="auditStatus != null">AND audit_status=#{auditStatus}</if>
             <if test="auditOpinion != null">AND audit_opinion=#{auditOpinion}</if>
             <if test="auditTime != null">AND audit_time=#{auditTime}</if>
+            <if test="auditResult != null">AND audit_result=#{auditResult}</if>
             <if test="id != null">AND id=#{id}</if>
         </where>
     </select>
@@ -106,6 +111,7 @@
             <if test="pd.eneity.auditStatus != null">AND audit_status=#{pd.eneity.auditStatus}</if>
             <if test="pd.eneity.auditOpinion != null">AND audit_opinion=#{pd.eneity.auditOpinion}</if>
             <if test="pd.eneity.auditTime != null">AND audit_time=#{pd.eneity.auditTime}</if>
+            <if test="pd.eneity.auditResult != null">AND audit_result=#{pd.eneity.auditResult}</if>
             <if test="pd.eneity.id != null">AND id=#{pd.eneity.id}</if>
         </where>
     </select>
@@ -118,13 +124,14 @@
         VALUES
         <foreach item="t" index="index" collection="list" separator=",">
             (
-            #{t.shopCompleteId}
-            #{t.applicationPerson}
-            #{t.applicationTime}
-            #{t.applicationDescription}
-            #{t.auditStatus}
-            #{t.auditOpinion}
-            #{t.auditTime}
+            #{t.shopCompleteId},
+            #{t.applicationPerson},
+            #{t.applicationTime},
+            #{t.applicationDescription},
+            #{t.auditStatus},
+            #{t.auditOpinion},
+            #{t.auditTime},
+            #{t.auditResult},
             #{t.id}
             )
         </foreach>

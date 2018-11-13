@@ -40,17 +40,6 @@ public class ShopBasicController {
         }
     }
 
-//    @ApiOperation(value = "删除一个或多个", notes = "删除一个或多个")
-//    @DeleteMapping("/deleteById/{ids}")
-//    public ResultVo deleteByIds(@PathVariable String ids) {
-//        try {
-//            return ResultVo.ok(shopBasicService.deleteArray(ids.split(",")));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResultVo.fail(e.getMessage());
-//        }
-//    }
-
     @ApiOperation(value = "修改", notes = "修改")
     @PutMapping("updateBySelective")
     public ResultVo updateBySelective(@RequestBody ShopBasic shopBasic) {

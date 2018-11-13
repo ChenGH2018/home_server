@@ -5,9 +5,12 @@ import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shopbasic.ShopBasic;
 import com.zhwl.home_server.mapper.shopbasic.ShopBasicMapper;
 import com.zhwl.home_server.service.shopbasic.ShopBasicService;
+import com.zhwl.home_server.system.WhetherEnum;
+import com.zhwl.home_server.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +25,9 @@ public class ShopBasicServiceImpl implements ShopBasicService {
 
     @Override
     public Integer save(ShopBasic shopBasic) {
+        shopBasic.setIsFreeze(WhetherEnum.NO.ordinal()); //冻结
+        shopBasic.setIsLogout(WhetherEnum.NO.ordinal()); //注销
+        shopBasic.setRegisterTime(new Date());  //注册时间
         return shopBasicMapper.save(shopBasic);
     }
 
@@ -57,6 +63,11 @@ public class ShopBasicServiceImpl implements ShopBasicService {
 
     @Override
     public Integer saveByList(List<ShopBasic> shopBasics) {
+        shopBasics.forEach(shopBasic ->{
+                if(Strings.isNullOrEmpty(shopBasic.getId())){
+                    shopBasic.setId(UuidUtil.get32UUID());
+                }
+        });
         return shopBasicMapper.saveByList(shopBasics);
     }
 

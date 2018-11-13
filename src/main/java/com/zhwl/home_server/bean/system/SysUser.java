@@ -25,6 +25,11 @@ public class SysUser implements UserDetails {
     private String password;  //密码
     private String userface;  //用户图像
     private String remark;  //备注
+    private Integer userType;//用户类型
+    private Integer isFreeze;//是否冻结 0：未冻结、1：已冻结
+    private Integer isLogout;//是否注销 0：未注销、1：已注销
+    private Integer isActivateEamil;//是否激活邮箱 0：未激活、1：已激活
+
     @ApiModelProperty(hidden = true)
     private Date addTime;  //添加时间
 
@@ -152,5 +157,37 @@ public class SysUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Integer getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Integer isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
+    public Integer getIsLogout() {
+        return isLogout;
+    }
+
+    public void setIsLogout(Integer isLogout) {
+        this.isLogout = isLogout;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
+
+    public Integer getIsActivateEamil() {
+        return isActivateEamil;
+    }
+
+    public void setIsActivateEamil(Integer isActivateEamil) {
+        this.isActivateEamil = isActivateEamil;
     }
 }

@@ -68,7 +68,7 @@ public class ShopCompleteController {
             @ApiImplicitParam(name = "page", value = "页码", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "条数", paramType = "query")
     })
-    @GetMapping
+    @GetMapping("getShopCompleteByPage")
     public ResultVo getShopCompleteByPage(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size,
                                           ShopComplete shopComplete) {
         Page pg = new Page();
