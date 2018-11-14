@@ -21,7 +21,7 @@ import java.util.HashMap;
  */
 @Api(tags = "商家完善信息")
 @RestController
-@RequestMapping("/shopComplete")
+@RequestMapping("/shop/shopComplete")
 public class ShopCompleteController {
 
     @Autowired

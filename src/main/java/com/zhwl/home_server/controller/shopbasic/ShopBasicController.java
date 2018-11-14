@@ -21,7 +21,7 @@ import java.util.HashMap;
  */
 @Api(tags = "商家基本信息")
 @RestController
-@RequestMapping("/shopBasic")
+@RequestMapping("/shop/shopBasic")
 public class ShopBasicController {
 
     @Autowired

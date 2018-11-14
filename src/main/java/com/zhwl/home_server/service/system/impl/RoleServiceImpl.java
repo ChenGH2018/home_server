@@ -44,6 +44,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> selectBySelective(Role role) {
+        return roleMapper.selectBySelective(role);
+    }
+
+    @Override
     public Role selectById(String id) {
         return Optional.ofNullable(id).map(x->{
             Role role = new Role();

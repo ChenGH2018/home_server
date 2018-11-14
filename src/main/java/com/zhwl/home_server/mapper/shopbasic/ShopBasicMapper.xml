@@ -108,7 +108,7 @@
     </update>
 
     <!--条件查询-->
-    <select id="selectBySelective" parameterType="ShopBasic" resultMap="ShopBasic">
+    <select id="selectBySelective" parameterType="ShopBasic" resultMap="BaseResultMap">
         select sb.email, sb.country, sb.enterprise_name, sb.enterprise_address, sb.contact_person, sb.contact_phone,
         sb.is_freeze, sb.is_logout, sb.audit_status, sb.register_time, sb.sys_user_id, sb.id AS sb_id
         <if test="isQueryComplete" >,sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,

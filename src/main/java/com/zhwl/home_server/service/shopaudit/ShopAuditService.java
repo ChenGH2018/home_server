@@ -70,5 +70,6 @@ public interface ShopAuditService {
     Integer deleteArray(String[] ids);
 
 
+    Integer auditShop(ShopAudit shopAudit);
 }
 

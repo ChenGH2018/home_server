@@ -3,6 +3,7 @@ package com.zhwl.home_server.mapper.shopaudit;
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shopaudit.ShopAudit;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,4 +28,5 @@ public interface ShopAuditMapper {
     List<ShopAudit> getShopAuditByPage(Page pg);
 
 
+    Integer auditShop(HashMap<String, Object> map);
 }

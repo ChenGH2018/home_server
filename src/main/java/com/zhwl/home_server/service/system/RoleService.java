@@ -8,6 +8,7 @@ import java.util.List;
 public interface RoleService {
     List<Role> selectAll();
     Page selectByPage(Page pg);
+    List<Role> selectBySelective(Role role);
     Role selectById(String id);
 
     Integer save(Role role);

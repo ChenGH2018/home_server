@@ -97,4 +97,15 @@ public class ShopAuditController {
         }
     }
 
+    @ApiOperation(value = "审核商家", notes = "审核商家")
+    @PutMapping("auditShop")
+    public ResultVo auditShop(ShopAudit shopAudit) {
+        try {
+            return ResultVo.ok(shopAuditService.auditShop(shopAudit));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.fail(e.getMessage());
+        }
+    }
+
 }
