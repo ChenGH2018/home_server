@@ -1,10 +1,10 @@
-package com.zhwl.home_server.controller.shopbasic;
+package com.zhwl.home_server.controller.shop;
 
 
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.ResultVo;
 import com.zhwl.home_server.bean.shopbasic.ShopBasic;
-import com.zhwl.home_server.service.shopbasic.ShopBasicService;
+import com.zhwl.home_server.service.shop.ShopBasicService;
 import com.zhwl.home_server.util.UuidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

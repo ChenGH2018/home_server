@@ -1,4 +1,4 @@
-package com.zhwl.home_server.service.shopcomplete;
+package com.zhwl.home_server.service.shop;
 
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shopcomplete.ShopComplete;

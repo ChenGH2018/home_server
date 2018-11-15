@@ -1,10 +1,10 @@
-package com.zhwl.home_server.service.shopbasic.impl;
+package com.zhwl.home_server.service.shop.impl;
 
 import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shopbasic.ShopBasic;
 import com.zhwl.home_server.mapper.shopbasic.ShopBasicMapper;
-import com.zhwl.home_server.service.shopbasic.ShopBasicService;
+import com.zhwl.home_server.service.shop.ShopBasicService;
 import com.zhwl.home_server.system.WhetherEnum;
 import com.zhwl.home_server.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;

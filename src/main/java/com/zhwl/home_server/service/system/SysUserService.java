@@ -20,4 +20,6 @@ public interface SysUserService extends UserDetailsService {
     void updateRoles(String sysUserId, String[] roleIds);
 
     Integer updateSysUser(SysUser sysUser);
+
+    List<SysUser> selectBySelective(SysUser sysUser);
 }

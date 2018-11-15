@@ -109,6 +109,11 @@ public class SysUserServiceImpl implements SysUserService {
         return updateBySelective(sysUser);
     }
 
+    @Override
+    public List<SysUser> selectBySelective(SysUser sysUser) {
+        return sysUserMapper.selectBySelective(sysUser);
+    }
+
     //检查用户名
     private void checkUsername(String username) {
         if (StringUtils.isEmpty(username))
