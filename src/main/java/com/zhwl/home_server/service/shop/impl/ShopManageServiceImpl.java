@@ -54,5 +54,6 @@ public class ShopManageServiceImpl implements ShopManageService {
         HashMap<String, Object> map = new HashMap<>();
         map.put(md5,email);
         return redisUtil.hset("RegEmailMap",md5,email,60*60*12);//24小时有效期
+
     }
 }

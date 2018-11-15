@@ -58,7 +58,6 @@ public class ShopManageController {
             if(shopManageService.sendEmailValidate(email))//true发送成功
                 return ResultVo.ok();
             return ResultVo.fail("该邮箱账号作为用户名已经存在");
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVo.fail(e.getMessage());
