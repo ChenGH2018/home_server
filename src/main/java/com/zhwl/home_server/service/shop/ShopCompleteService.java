@@ -1,7 +1,7 @@
 package com.zhwl.home_server.service.shop;
 
 import com.zhwl.home_server.bean.Page;
-import com.zhwl.home_server.bean.shopcomplete.ShopComplete;
+import com.zhwl.home_server.bean.shop.ShopComplete;
 
 import java.util.List;
 /** 

@@ -1,5 +1,7 @@
 package com.zhwl.home_server.util;
 
+import com.google.common.base.Strings;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +16,18 @@ import java.util.regex.Pattern;
  * 修改时间：2015年11月24日
  */
 public class Tools {
+
+    /**
+     * 检查手机号是否正确
+     */
+    public static Boolean isPhone(String phone){
+        if(Strings.isNullOrEmpty(phone)) return false;
+        String PHONE_NUMBER_REG = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
+        // 编译正则表达式
+        Pattern pattern = Pattern.compile(PHONE_NUMBER_REG);
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches();
+    }
     /**
      * 随机生成4位数验证码
      * @param

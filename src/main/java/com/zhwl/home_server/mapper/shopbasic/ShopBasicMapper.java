@@ -1,7 +1,7 @@
 package com.zhwl.home_server.mapper.shopbasic;
 
 import com.zhwl.home_server.bean.Page;
-import com.zhwl.home_server.bean.shopbasic.ShopBasic;
+import com.zhwl.home_server.bean.shop.ShopBasic;
 
 import java.util.List;
 

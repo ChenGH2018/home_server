@@ -1,5 +1,6 @@
 package com.zhwl.home_server.config;
 
+import com.zhwl.home_server.sysconst.QueueName;
 import lombok.Data;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -16,12 +17,7 @@ import org.springframework.context.annotation.Scope;
 //@ConfigurationProperties(prefix = "rabbit.properties")
 public class RabbitConfig {
 
-    public static String emailQueueName;
-
-    @Value("${rabbit.properties.emailQueueName}")
-    public void setEmailQueueName(String emailQueueName) {
-        RabbitConfig.emailQueueName = emailQueueName;
-    }
+    public static String emailQueueName = QueueName.EMAIL_VALIDATE_QUEUE;
 
     @Bean
     public Queue queue() {
@@ -73,4 +69,12 @@ public class RabbitConfig {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         return template;
     }
+
+//    @Bean
+//    public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(ConnectionFactory connectionFactory){
+//        //SimpleRabbitListenerContainerFactory发现消息中有content_type有text就会默认将其转换成string类型的
+//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+//        factory.setConnectionFactory(connectionFactory);
+//        return factory;
+//    }
 }

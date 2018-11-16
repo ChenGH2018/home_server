@@ -1,6 +1,6 @@
 package com.zhwl.home_server.bean.shopaudit;
 
-import com.zhwl.home_server.bean.shopbasic.ShopBasic;
+import com.zhwl.home_server.bean.shop.ShopBasic;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

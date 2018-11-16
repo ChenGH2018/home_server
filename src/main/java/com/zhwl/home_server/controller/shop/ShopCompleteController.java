@@ -3,7 +3,7 @@ package com.zhwl.home_server.controller.shop;
 
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.ResultVo;
-import com.zhwl.home_server.bean.shopcomplete.ShopComplete;
+import com.zhwl.home_server.bean.shop.ShopComplete;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
 import com.zhwl.home_server.util.UuidUtil;
 import io.swagger.annotations.Api;

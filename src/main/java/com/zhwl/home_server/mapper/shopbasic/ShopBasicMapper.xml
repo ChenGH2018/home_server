@@ -38,7 +38,7 @@
         <result column="audit_status" property="auditStatus"/>
         <result column="register_time" property="registerTime"/>
         <result column="sys_user_id" property="sysUserId"/>
-        <association property="shopComplete" javaType="com.zhwl.home_server.bean.shopcomplete.ShopComplete" >
+        <association property="shopComplete" javaType="com.zhwl.home_server.bean.shop.ShopComplete" >
             <id column="sc_id" property="id"/>
             <result column="shop_basic_id" property="shopBasicId"/>
             <result column="shop_name" property="shopName"/>

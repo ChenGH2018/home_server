@@ -1,6 +1,5 @@
-package com.zhwl.home_server.bean.shopbasic;
+package com.zhwl.home_server.bean.shop;
 
-import com.zhwl.home_server.bean.shopcomplete.ShopComplete;
 import com.zhwl.home_server.bean.system.SysUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -16,17 +16,16 @@ public class EmailSender implements RabbitTemplate.ConfirmCallback{
 
     @Autowired
     private RabbitTemplate rabbitTemplate;//SCOPE:PROTOTYPE
-
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         if(ack){
             System.out.println("email arrive queue!");
         }else {
-            System.out.println("email send failed!");
+            System.out.println("email sendValidate failed:"+cause);
         }
     }
 
-    public boolean send(String email){
+    public boolean sendValidate(String email){
         rabbitTemplate.setConfirmCallback(this);//到达回调当前对象的confim方法
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());//消息ID存放类
         System.out.println("callbackSender UUID: " + correlationData.getId());

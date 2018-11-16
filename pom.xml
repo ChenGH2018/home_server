@@ -25,6 +25,11 @@
 	</properties>
 
 	<dependencies>
+		<!--邮箱启动器-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		<!--Redis启动器-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

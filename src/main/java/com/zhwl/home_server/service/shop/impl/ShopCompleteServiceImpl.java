@@ -2,7 +2,7 @@ package com.zhwl.home_server.service.shop.impl;
 
 import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
-import com.zhwl.home_server.bean.shopcomplete.ShopComplete;
+import com.zhwl.home_server.bean.shop.ShopComplete;
 import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;

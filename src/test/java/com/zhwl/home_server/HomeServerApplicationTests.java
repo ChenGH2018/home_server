@@ -10,11 +10,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class HomeServerApplicationTests {
-	@Autowired
-	EmailSender emailSender;
-	@Test
-	public void contextLoads() {
-		emailSender.send("1239123910@qq.com");
-	}
+    @Autowired
+    EmailSender emailSender;
+
+    @Test
+    public void contextLoads() {
+        emailSender.sendValidate("chenguihao21@163.com");
+    }
 
 }

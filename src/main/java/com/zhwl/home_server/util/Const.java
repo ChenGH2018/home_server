@@ -42,7 +42,7 @@ public class Const {
 	public static final String ImagePiex = "/image";		//文件读取前缀
 	public static final String FILEPATHTWODIMENSIONCODE = "uploadFiles/twoDimensionCode/"; //二维码存放路径
 	public static final String STATIC_FILE_PATH = ".*/*.(html|js|css|map|ico|gif|bmp|png|jpg|jpeg|svg|mp3|eot|ttf|woff|woff2|exe)"; //静态文件
-	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(login?logout)|(code)|(interiorMemberInfo)|(memberInfo/getMemberInfoByCardNum*)|(verifyCardNumberBySms)|(mobile/)|(getAllSendMealPath)|(getSendMealPathByPage)).*";	//不对匹配该值的访问路径拦截（正则）
+	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(login?logout)|(code)|(shopManage/)).*";	//不对匹配该值的访问路径拦截（正则）
 	public static final String FRONT_DESK_PATH = ".*/((setMeal/getMenuAndOrderByCard)|(orderManager/submitOrderBycardNum)).*";	//前台不拦截的URL
 	public static ApplicationContext WEB_APP_CONTEXT = null; //该值会在web容器启动时由WebAppContextListener初始化
 
