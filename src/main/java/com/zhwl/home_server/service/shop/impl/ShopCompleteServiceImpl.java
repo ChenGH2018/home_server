@@ -3,13 +3,18 @@ package com.zhwl.home_server.service.shop.impl;
 import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shop.ShopComplete;
+import com.zhwl.home_server.bean.shopaudit.ShopAudit;
 import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
+import com.zhwl.home_server.service.shopaudit.ShopAuditService;
+import com.zhwl.home_server.util.UuidUtil;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,15 +22,31 @@ import java.util.List;
  * 创建时间：2018-11-10
  */
 @Service
+@Transactional
 public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Autowired
     ShopCompleteMapper shopCompleteMapper;
-
+    @Autowired
+    ShopAuditService shopAuditService;
     @Override
     public Integer save(ShopComplete shopComplete) {
+        ShopComplete queryEntity = new ShopComplete();
         shopCompleteNoNull(shopComplete);
-        return shopCompleteMapper.save(shopComplete);
+        ShopAudit shopAudit = shopComplete.getShopAudit();
+        shopAudit.setId(UuidUtil.get32UUID());
+        shopAuditNoNull(shopAudit);
+        shopAudit.setApplicationTime(new Date());
+        shopAudit.setAuditStatus(0); //未审核
+        shopAudit.setShopCompleteId(shopComplete.getId());
+        Integer completeSave = shopCompleteMapper.save(shopComplete);
+        Integer shopAuditSave = shopAuditService.save(shopAudit);
+        if(completeSave != 1 || shopAuditSave != 1) throw new BaseException("提交失败");
+        return 1;
+    }
+
+    private void shopAuditNoNull(@NonNull ShopAudit shopAudit) {
+        if(Strings.isNullOrEmpty(shopAudit.getApplicationPerson())) throw new BaseException("审核申请人不能为空");
     }
 
     private void shopCompleteNoNull(@NonNull ShopComplete shopComplete) {
@@ -51,7 +72,16 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
     @Override
     public Integer updateBySelective(ShopComplete shopComplete) {
         if(Strings.isNullOrEmpty(shopComplete.getId())) throw new RuntimeException("修改ID不能为空");
-        return shopCompleteMapper.updateBySelective(shopComplete);
+        Integer updateCount = shopCompleteMapper.updateBySelective(shopComplete);
+        //!=1 return
+        if(updateCount != 1) return 0;
+        //修改了完善信息则修改审核状态为未审核
+        ShopAudit shopAudit = new ShopAudit();
+        shopAudit.setAuditStatus(0);
+        shopAudit.setAuditResult(2);
+        shopAudit.setShopCompleteId(shopComplete.getId());
+        if(shopAuditService.updateAuditStatus(shopAudit) != 1) throw new BaseException("异常操作");
+        return 1;
     }
 
     @Override
@@ -64,6 +94,7 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Override
     public List<ShopComplete> selectBySelective(ShopComplete shopComplete) {
+        shopComplete.setQueryAudit(true);//查询审核情况
         return shopCompleteMapper.selectBySelective(shopComplete);
     }
 

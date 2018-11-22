@@ -44,7 +44,7 @@ public class Tools {
      *
      * @return
      */
-    public static int getRandomNum() {
+    public static int get6BitRandomNum() {
         Random r = new Random();
         return r.nextInt(900000) + 100000;//(Math.random()*(999999-100000)+100000)
     }
@@ -287,7 +287,7 @@ public class Tools {
 
 
     public static void main(String[] args) {
-        System.out.println(getRandomNum());
+        System.out.println(get6BitRandomNum());
     }
 
 }

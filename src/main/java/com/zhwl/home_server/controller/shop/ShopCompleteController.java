@@ -51,6 +51,16 @@ public class ShopCompleteController {
             return ResultVo.fail(e.getMessage());
         }
     }
+    @ApiOperation(value = "删除一个或多个", notes = "删除一个或多个")
+    @DeleteMapping("deleteByIds/{ids}")
+    public ResultVo deleteByIds(@PathVariable String ids) {
+        try {
+            return ResultVo.ok(shopCompleteService.deleteArray(ids.split(",")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.fail(e.getMessage());
+        }
+    }
 
     @ApiOperation(value = "查看", notes = "根据id查看")
     @GetMapping(value = "/{id}")

@@ -36,7 +36,7 @@ public class ShopComplete {
 
     @ApiModelProperty(hidden = true)
     private ShopBasic shopBasic;    //商家基本信息
-    @ApiModelProperty(hidden = true)
+//    @ApiModelProperty(hidden = true)
     private ShopAudit shopAudit;    //商家审核信息
 
 }

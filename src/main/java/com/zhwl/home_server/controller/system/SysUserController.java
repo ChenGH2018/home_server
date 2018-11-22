@@ -4,6 +4,7 @@ import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.ResultVo;
 import com.zhwl.home_server.bean.system.SysUser;
 import com.zhwl.home_server.service.system.SysUserService;
+import com.zhwl.home_server.util.UuidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,7 @@ public class SysUserController {
     @PostMapping("/save")
     public ResultVo save(@RequestBody SysUser sysUser) {
         try {
+            sysUser.setId(UuidUtil.get32UUID());
             return ResultVo.ok(sysUserService.save(sysUser));
         } catch (Exception e) {
             e.printStackTrace();

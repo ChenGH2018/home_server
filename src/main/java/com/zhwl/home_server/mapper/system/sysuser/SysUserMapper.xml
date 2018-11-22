@@ -19,6 +19,8 @@
         userface,
         remark,
         add_time,
+        user_type,
+        is_freeze,
         id
     </sql>
 
@@ -32,7 +34,8 @@
         <result column="password" property="password"/>
         <result column="userface" property="userface"/>
         <result column="remark" property="remark"/>
-        <result column="add_time" property="addTime"/>
+        <result column="user_type" property="userType"/>
+        <result column="is_freeze" property="isFreeze"/>
         <collection property="roles" ofType="Role" javaType="java.util.ArrayList">
             <id column="rid" property="id"/>
             <result column="rname" property="name"/>
@@ -44,7 +47,7 @@
     <!--条件查询-->
     <select id="selectBySelective" parameterType="SysUser" resultMap="BaseResultMap">
         select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
-        tr.name as rname,tr.name_zh,tr.id as rid
+        tsu.user_type,tsu.is_freeze, tr.name as rname,tr.name_zh,tr.id as rid
         from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
         left join role as tr on tr.id = tsur.role_id
         <where>
@@ -56,6 +59,8 @@
             <if test="password != null">AND tsu.password=#{password}</if>
             <if test="userface != null">AND tsu.userface=#{userface}</if>
             <if test="remark != null">AND tsu.remark=#{remark}</if>
+            <if test="userType != null">AND tsu.user_type=#{userType}</if>
+            <if test="isFreeze != null">AND tsu.is_freeze=#{isFreeze}</if>
             <if test="id != null">AND tsu.id=#{id}</if>
         </where>
         order by tsu.add_time
@@ -64,7 +69,7 @@
     <!--条件查询-->
     <select id="selectByPage" parameterType="Page" resultMap="BaseResultMap">
         select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
-        tr.name as rname,tr.name_zh,tr.id as rid
+        tsu.user_type,tsu.is_freeze, tr.name as rname,tr.name_zh,tr.id as rid
         from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
         left join role as tr on tr.id = tsur.role_id
         <where>
@@ -76,6 +81,8 @@
             <if test="pd.password != null">AND tsu.password=#{pd.password}</if>
             <if test="pd.userface != null">AND tsu.userface=#{pd.userface}</if>
             <if test="pd.remark != null">AND tsu.remark=#{pd.remark}</if>
+            <if test="pd.userType != null">AND tsu.user_type=#{pd.userType}</if>
+            <if test="pd.isFreeze != null">AND tsu.is_freeze=#{pd.isFreeze}</if>
             <if test="pd.id != null">AND tsu.id=#{pd.id}</if>
         </where>
         order by tsu.add_time
@@ -84,7 +91,7 @@
     <!--验证用户名-->
     <select id="loadUserByUsername" parameterType="String" resultMap="BaseResultMap">
         select tsu.name,tsu.phone,tsu.telephone,tsu.address,tsu.username,tsu.password,tsu.userface,tsu.remark,tsu.add_time,tsu.id,
-        tr.name as rname,tr.name_zh,tr.id as rid
+        tsu.user_type,tsu.is_freeze, tr.name as rname,tr.name_zh,tr.id as rid
         from <include refid="tableName"></include> as tsu left join sys_user_role tsur on tsu.id = tsur.sys_user_id
         left join role as tr on tr.id = tsur.role_id
         where tsu.username = #{username}
@@ -106,6 +113,8 @@
         #{userface},
         #{remark},
         #{addTime},
+        #{userType},
+        #{isFreeze},
         #{id}
         )
     </insert>
@@ -114,16 +123,18 @@
     <update id="updateBySelective" parameterType="SysUser">
         update
         <include refid="tableName"></include>
-        set
-        id=#{id}
-        <if test="name != null">, name=#{name}</if>
-        <if test="phone != null">, phone=#{phone}</if>
-        <if test="telephone != null">, telephone=#{telephone}</if>
-        <if test="address != null">, address=#{address}</if>
-        <if test="username != null">, username=#{username}</if>
-        <if test="password != null">, password=#{password}</if>
-        <if test="userface != null">, userface=#{userface}</if>
-        <if test="remark != null">, remark=#{remark}</if>
+        <set>
+            <if test="name != null">, name=#{name}</if>
+            <if test="phone != null">, phone=#{phone}</if>
+            <if test="telephone != null">, telephone=#{telephone}</if>
+            <if test="address != null">, address=#{address}</if>
+            <if test="username != null">, username=#{username}</if>
+            <if test="password != null">, password=#{password}</if>
+            <if test="userface != null">, userface=#{userface}</if>
+            <if test="remark != null">, remark=#{remark}</if>
+            <if test="userType != null">, user_type=#{userType}</if>
+            <if test="isFreeze != null">, is_freeze=#{isFreeze}</if>
+        </set>
         WHERE
         id=#{id}
     </update>
@@ -143,6 +154,17 @@
             #{item}
         </foreach>
     </delete>
+    <!--检查手机号是否存在，查sys表和shopbasic表-->
+    <select id="checkPhoneExist" parameterType="string" resultType="integer">
+        SELECT count(1) FROM <include refid="tableName"/> AS su JOIN t_shop_basic AS sb
+        WHERE
+          #{phone} = su.phone OR #{phone} = sb.contact_phone
+    </select>
 
-
+    <!--检查邮箱是否存在-->
+    <select id="checkEmailExist" parameterType="string" resultType="integer">
+        SELECT count(1) FROM <include refid="tableName"/>
+        WHERE
+        #{email} = username
+    </select>
 </mapper>

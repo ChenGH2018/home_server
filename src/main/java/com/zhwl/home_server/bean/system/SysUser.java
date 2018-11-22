@@ -15,6 +15,7 @@ import java.util.List;
 
 @Table(name = "sys_user")
 public class SysUser implements UserDetails {
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String name; //姓名

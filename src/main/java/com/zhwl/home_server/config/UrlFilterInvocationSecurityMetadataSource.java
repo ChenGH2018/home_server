@@ -27,6 +27,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
+        if(o != null ) return null;
         //获取请求地址
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         if ("/".equals(requestUrl) || requestUrl.matches(Const.NO_INTERCEPTOR_PATH) ||

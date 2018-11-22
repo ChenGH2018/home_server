@@ -29,4 +29,6 @@ public interface ShopAuditMapper {
 
 
     Integer auditShop(HashMap<String, Object> map);
+
+    Integer updateAuditStatus(ShopAudit shopAudit);
 }

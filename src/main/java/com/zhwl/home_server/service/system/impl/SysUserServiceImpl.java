@@ -71,7 +71,6 @@ public class SysUserServiceImpl implements SysUserService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         sysUser.setPassword(encoder.encode(sysUser.getPassword()));
-        sysUser.setId(UuidUtil.get32UUID());
         sysUser.setUserface("http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg");
         sysUser.setAddTime(new Date());
         //如果没有usertype则默认是系统用户（真正操作还会校验权限，所以没事）
@@ -112,6 +111,16 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public List<SysUser> selectBySelective(SysUser sysUser) {
         return sysUserMapper.selectBySelective(sysUser);
+    }
+
+    @Override
+    public boolean checkPhoneExist(String phone) {
+        return sysUserMapper.checkPhoneExist(phone) > 0;
+    }
+
+    @Override
+    public boolean checkEmailExist(String email) {
+        return sysUserMapper.checkEmailExist(email)>0;
     }
 
     //检查用户名

@@ -22,8 +22,8 @@ public class RabbitConfig {
     @Bean
     public Queue queue() {
         //邮箱队列，使用公平队列模式
-        //public Queue(String name, boolean durable, boolean exclusive, boolean autoDelete)
-        return new Queue(emailQueueName, true, false, true);
+        //public Queue(String name, boolean durable, boolean exclusive, boolean autoDelete)autoDelete：没有消费者绑定到该队列时，该队列将自动删除
+        return new Queue(emailQueueName, false, false, false);
     }
 
 

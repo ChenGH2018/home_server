@@ -11,6 +11,7 @@ import java.util.Date;
 @Data
 @Table(name = "t_shop_basic")
 public class ShopBasic {
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
     private String email;//邮箱地址
@@ -28,9 +29,9 @@ public class ShopBasic {
     private Boolean isQueryComplete;   //是否关联查询完善信息
     private Boolean isQuerySysUser;   //是否关联查询用户信息
 
-    @ApiModelProperty
+    @ApiModelProperty(hidden = true)
     private ShopComplete shopComplete; //商家完善信息
-    @ApiModelProperty
+    @ApiModelProperty(hidden = true)
     private SysUser sysUser;//该商家的系统用户信息
 
 }

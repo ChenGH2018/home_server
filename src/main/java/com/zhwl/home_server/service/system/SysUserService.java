@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface SysUserService extends UserDetailsService {
     List<SysUser> selectAll();
+
     Page selectByPage(Page pg);
+
     SysUser selectById(String id);
 
     Integer save(SysUser sysUser);
@@ -22,4 +24,8 @@ public interface SysUserService extends UserDetailsService {
     Integer updateSysUser(SysUser sysUser);
 
     List<SysUser> selectBySelective(SysUser sysUser);
+
+    boolean checkPhoneExist(String phone);
+
+    boolean checkEmailExist(String email);
 }

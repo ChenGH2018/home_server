@@ -16,14 +16,14 @@ import java.util.Date;
 public class ShopAudit {
     @Id
     private String id;
-    private String shopBasicId;//申请商家ID
+    private String shopCompleteId;//申请商家ID
     private String applicationPerson;//申请人
     private Date applicationTime;//申请时间
     private String applicationDescription;//申请说明
     private Integer auditStatus;//审核状态  0:未审批、1：已审批
     private String auditOpinion;//审核意见
     private Date auditTime;//审核时间
-    private Boolean auditResult;//审核结果  1：已通过、2：未通过
+    private Integer auditResult;//审核结果  1：已通过、2：未通过
 
     @Transient
     private Boolean isQueryShop;//是否查询关联商家

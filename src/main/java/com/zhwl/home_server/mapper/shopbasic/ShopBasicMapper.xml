@@ -40,7 +40,7 @@
         <result column="sys_user_id" property="sysUserId"/>
         <association property="shopComplete" javaType="com.zhwl.home_server.bean.shop.ShopComplete" >
             <id column="sc_id" property="id"/>
-            <result column="shop_basic_id" property="shopBasicId"/>
+            <result column="shop_basic_id" property="shopCompleteId"/>
             <result column="shop_name" property="shopName"/>
             <result column="company_homepage" property="companyHomepage"/>
             <result column="company_type" property="companyType"/>

@@ -19,4 +19,19 @@ public class SysUserUtil {
             return new SysUser();
         }
     }
+
+    public static SysUser getCurrentRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication==null)
+            return new SysUser();
+        Object principal =authentication.getPrincipal();
+        if(principal instanceof SysUser)
+        {
+            SysUser user = (SysUser)principal;
+            user.setPassword(null);
+            return  user;
+        }else {
+            return new SysUser();
+        }
+    }
 }

@@ -29,7 +29,7 @@
     </sql>
 
     <resultMap id="BaseResultMap" type="ShopComplete">
-        <id column="id" property="id"/>
+        <id column="sc_id" property="id"/>
         <result column="shop_basic_id" property="shopBasicId"/>
         <result column="shop_name" property="shopName"/>
         <result column="company_homepage" property="companyHomepage"/>
@@ -44,6 +44,9 @@
         <result column="fixed_telephone" property="fixedTelephone"/>
         <result column="legal_representative" property="legalRepresentative"/>
         <result column="business_license_url" property="businessLicenseUrl"/>
+        <association property="shopAudit" javaType="ShopAudit">
+            <id column="sa_id" property="id"/>
+        </association>
     </resultMap>
 
     <!-- 新增-->
@@ -103,11 +106,14 @@
     </update>
 
     <!--条件查询-->
-    <select id="selectBySelective" parameterType="ShopComplete" resultType="ShopComplete">
-        select
-        <include refid="Field"></include>
+    <select id="selectBySelective" parameterType="ShopComplete" resultMap="BaseResultMap">
+        select sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,
+        sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,
+        sc.legal_representative,sc.business_license_url,sc.id AS sc_id
+        <if test="queryAudit" > ,sa.shop_complete_id,sa.application_person,sa.application_time,
+            sa.application_description,sa.audit_status,sa.audit_opinion,sa.audit_time,sa.audit_result,sa.id AS sa_id</if>
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/> AS sc <if test="queryAudit">LEFT JOIN t_shop_audit AS sa ON sc.id = sa.shop_complete_id</if>
         <where>
             <if test="shopBasicId != null">AND shop_basic_id=#{shopBasicId}</if>
             <if test="shopName != null">AND shop_name=#{shopName}</if>
@@ -123,16 +129,19 @@
             <if test="fixedTelephone != null">AND fixed_telephone=#{fixedTelephone}</if>
             <if test="legalRepresentative != null">AND legal_representative=#{legalRepresentative}</if>
             <if test="businessLicenseUrl != null">AND business_license_url=#{businessLicenseUrl}</if>
-            <if test="id != null">AND id=#{id}</if>
+            <if test="id != null">AND sc_id=#{id}</if>
         </where>
     </select>
 
     <!--条件查询-->
-    <select id="getShopCompleteByPage" parameterType="Page" resultType="ShopComplete">
-        select
-        <include refid="Field"></include>
+    <select id="getShopCompleteByPage" parameterType="Page" resultMap="BaseResultMap">
+        select sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,
+        sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,
+        sc.legal_representative,sc.business_license_url,sc.id AS sc_id
+        <if test="pd.entity.queryAudit" >,sa.shop_complete_id,sa.application_person,sa.application_time,
+        sa.application_description,sa.audit_status,sa.audit_opinion,sa.audit_time,sa.audit_result,sa.id AS sa_id</if>
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/> AS sc <if test="pd.entity.queryAudit">LEFT JOIN t_shop_audit AS sa ON sc.id = sa.shop_complete_id</if>
         <where>
             <if test="pd.entity.shopBasicId != null">AND shop_basic_id=#{pd.entity.shopBasicId}</if>
             <if test="pd.entity.shopName != null">AND shop_name=#{pd.entity.shopName}</if>
@@ -148,7 +157,7 @@
             <if test="pd.entity.fixedTelephone != null">AND fixed_telephone=#{pd.entity.fixedTelephone}</if>
             <if test="pd.entity.legalRepresentative != null">AND legal_representative=#{pd.entity.legalRepresentative}</if>
             <if test="pd.entity.businessLicenseUrl != null">AND business_license_url=#{pd.entity.businessLicenseUrl}</if>
-            <if test="pd.entity.id != null">AND id=#{pd.entity.id}</if>
+            <if test="pd.entity.id != null">AND sc_id=#{pd.entity.id}</if>
         </where>
     </select>
 
@@ -189,5 +198,6 @@
         #{item}
         </foreach>
     </delete>
-
+    <!--查询该商家是否已经有完善信息-->
+    <!--<select id=""-->
 </mapper>

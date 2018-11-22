@@ -17,4 +17,8 @@ public interface SysUserMapper {
     Integer updateBySelective(SysUser sysUser);
 
     Integer deleteByIds(String[] ids);
+
+    Integer checkPhoneExist(String phone);
+
+    Integer checkEmailExist(String email);
 }

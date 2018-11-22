@@ -71,5 +71,7 @@ public interface ShopAuditService {
 
 
     Integer auditShop(ShopAudit shopAudit);
+
+    Integer updateAuditStatus(ShopAudit shopAudit);
 }
 
