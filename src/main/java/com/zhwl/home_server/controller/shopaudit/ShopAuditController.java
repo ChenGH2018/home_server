@@ -99,7 +99,7 @@ public class ShopAuditController {
 
     @ApiOperation(value = "审核商家", notes = "审核商家")
     @PutMapping("auditShop")
-    public ResultVo auditShop(ShopAudit shopAudit) {
+    public ResultVo auditShop(@RequestBody ShopAudit shopAudit) {
         try {
             return ResultVo.ok(shopAuditService.auditShop(shopAudit));
         } catch (Exception e) {

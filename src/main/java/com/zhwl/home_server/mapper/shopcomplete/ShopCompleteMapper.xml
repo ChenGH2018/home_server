@@ -44,7 +44,7 @@
         <result column="fixed_telephone" property="fixedTelephone"/>
         <result column="legal_representative" property="legalRepresentative"/>
         <result column="business_license_url" property="businessLicenseUrl"/>
-        <association property="shopAudit" javaType="ShopAudit">
+        <association property="shopAudit" javaType="ShopAudit" autoMapping="true">
             <id column="sa_id" property="id"/>
         </association>
     </resultMap>
@@ -129,7 +129,7 @@
             <if test="fixedTelephone != null">AND fixed_telephone=#{fixedTelephone}</if>
             <if test="legalRepresentative != null">AND legal_representative=#{legalRepresentative}</if>
             <if test="businessLicenseUrl != null">AND business_license_url=#{businessLicenseUrl}</if>
-            <if test="id != null">AND sc_id=#{id}</if>
+            <if test="id != null">AND sc.id=#{id}</if>
         </where>
     </select>
 
@@ -157,7 +157,7 @@
             <if test="pd.entity.fixedTelephone != null">AND fixed_telephone=#{pd.entity.fixedTelephone}</if>
             <if test="pd.entity.legalRepresentative != null">AND legal_representative=#{pd.entity.legalRepresentative}</if>
             <if test="pd.entity.businessLicenseUrl != null">AND business_license_url=#{pd.entity.businessLicenseUrl}</if>
-            <if test="pd.entity.id != null">AND sc_id=#{pd.entity.id}</if>
+            <if test="pd.entity.id != null">AND sc.id=#{pd.entity.id}</if>
         </where>
     </select>
 
@@ -199,5 +199,4 @@
         </foreach>
     </delete>
     <!--查询该商家是否已经有完善信息-->
-    <!--<select id=""-->
 </mapper>

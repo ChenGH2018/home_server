@@ -39,6 +39,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             }
         }
         // 3. 校验通过，就放行
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

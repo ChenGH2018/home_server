@@ -44,5 +44,13 @@
         sys_user_id = #{sysUserId}
     </delete>
 
-
+    <!--修改商家的角色、修改表：sys_user_role-->
+    <update id="updateRole" parameterType="map">
+        UPDATE sys_user_role AS sur
+        LEFT JOIN t_shop_basic AS sb on sur.sys_user_id = sb.sys_user_id
+        SET
+        sur.role_id = #{roleId}
+        WHERE
+        sb.id = #{shopId}
+     </update>
 </mapper>

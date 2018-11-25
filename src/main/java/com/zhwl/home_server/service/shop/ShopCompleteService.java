@@ -59,5 +59,6 @@ ShopComplete selectById(String shopCompleteId);
     Integer deleteArray(String[] ids);
 
 
+    ShopComplete getShopCompleteAndAudit(String shopBasicId);
 }
 

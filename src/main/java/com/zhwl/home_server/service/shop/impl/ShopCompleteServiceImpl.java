@@ -29,9 +29,9 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
     ShopCompleteMapper shopCompleteMapper;
     @Autowired
     ShopAuditService shopAuditService;
+
     @Override
     public Integer save(ShopComplete shopComplete) {
-        ShopComplete queryEntity = new ShopComplete();
         shopCompleteNoNull(shopComplete);
         ShopAudit shopAudit = shopComplete.getShopAudit();
         shopAudit.setId(UuidUtil.get32UUID());
@@ -41,27 +41,27 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
         shopAudit.setShopCompleteId(shopComplete.getId());
         Integer completeSave = shopCompleteMapper.save(shopComplete);
         Integer shopAuditSave = shopAuditService.save(shopAudit);
-        if(completeSave != 1 || shopAuditSave != 1) throw new BaseException("提交失败");
+        if (completeSave != 1 || shopAuditSave != 1) throw new BaseException("提交失败");
         return 1;
     }
 
     private void shopAuditNoNull(@NonNull ShopAudit shopAudit) {
-        if(Strings.isNullOrEmpty(shopAudit.getApplicationPerson())) throw new BaseException("审核申请人不能为空");
+        if (Strings.isNullOrEmpty(shopAudit.getApplicationPerson())) throw new BaseException("审核申请人不能为空");
     }
 
     private void shopCompleteNoNull(@NonNull ShopComplete shopComplete) {
-        if(Strings.isNullOrEmpty(shopComplete.getShopBasicId())) throw new BaseException("商家基本ID不能为空");
-        if(Strings.isNullOrEmpty(shopComplete.getShopName())) throw new BaseException("店铺名不能为空");
-        if(Strings.isNullOrEmpty(shopComplete.getBusinessLicenseUrl())) throw new BaseException("营业执照不能为空");
-        if(Strings.isNullOrEmpty(shopComplete.getBusinessRegistrationNumber())) throw new BaseException("工商注册号");
-        if(Strings.isNullOrEmpty(shopComplete.getLegalRepresentative())) throw new BaseException("法人代表不能为空");
-        if(Strings.isNullOrEmpty(shopComplete.getRegisteredAddress())) throw new BaseException("注册地址不能为空");
-        if(Strings.isNullOrEmpty(shopComplete.getUnifiedSocialCreditCode())) throw new BaseException("统一社会信用代码");
-        if(Strings.isNullOrEmpty(shopComplete.getCompanyType())) throw new BaseException("公司类型不能为空");
-        if(null == shopComplete.getRegisteredCapital()) throw new BaseException("注册资本不能为空");
-        if(null == shopComplete.getEstablishmentDate()) throw new BaseException("成立日期不能为空");
-        if(null == shopComplete.getBusinessPeriodBegins()) throw new BaseException("营业期限开始日期不能为空");
-        if(null == shopComplete.getBusinessPeriodEnd()) throw new BaseException("营业期限结束日期不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getShopBasicId())) throw new BaseException("商家基本ID不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getShopName())) throw new BaseException("店铺名不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getBusinessLicenseUrl())) throw new BaseException("营业执照不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getBusinessRegistrationNumber())) throw new BaseException("工商注册号");
+        if (Strings.isNullOrEmpty(shopComplete.getLegalRepresentative())) throw new BaseException("法人代表不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getRegisteredAddress())) throw new BaseException("注册地址不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getUnifiedSocialCreditCode())) throw new BaseException("统一社会信用代码");
+        if (Strings.isNullOrEmpty(shopComplete.getCompanyType())) throw new BaseException("公司类型不能为空");
+        if (null == shopComplete.getRegisteredCapital()) throw new BaseException("注册资本不能为空");
+        if (null == shopComplete.getEstablishmentDate()) throw new BaseException("成立日期不能为空");
+        if (null == shopComplete.getBusinessPeriodBegins()) throw new BaseException("营业期限开始日期不能为空");
+        if (null == shopComplete.getBusinessPeriodEnd()) throw new BaseException("营业期限结束日期不能为空");
     }
 
     @Override
@@ -71,16 +71,16 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Override
     public Integer updateBySelective(ShopComplete shopComplete) {
-        if(Strings.isNullOrEmpty(shopComplete.getId())) throw new RuntimeException("修改ID不能为空");
+        if (Strings.isNullOrEmpty(shopComplete.getId())) throw new RuntimeException("修改ID不能为空");
         Integer updateCount = shopCompleteMapper.updateBySelective(shopComplete);
         //!=1 return
-        if(updateCount != 1) return 0;
+        if (updateCount != 1) return 0;
         //修改了完善信息则修改审核状态为未审核
         ShopAudit shopAudit = new ShopAudit();
         shopAudit.setAuditStatus(0);
         shopAudit.setAuditResult(2);
         shopAudit.setShopCompleteId(shopComplete.getId());
-        if(shopAuditService.updateAuditStatus(shopAudit) != 1) throw new BaseException("异常操作");
+        if (shopAuditService.updateAuditStatus(shopAudit) != 1) throw new BaseException("异常操作");
         return 1;
     }
 
@@ -103,7 +103,6 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
         return shopCompleteMapper.getShopCompleteByPage(pg);
     }
 
-
     @Override
     public Integer saveByList(List<ShopComplete> shopCompletes) {
         return shopCompleteMapper.saveByList(shopCompletes);
@@ -112,6 +111,18 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
     @Override
     public Integer deleteArray(String[] ids) {
         return shopCompleteMapper.deleteArray(ids);
+    }
+
+    @Override
+    public ShopComplete getShopCompleteAndAudit(String shopBasicId) {
+        if (Strings.isNullOrEmpty(shopBasicId)) throw new BaseException("商家基本ID不能为空");
+        ShopComplete shopComplete = new ShopComplete();
+        shopComplete.setShopBasicId(shopBasicId);
+        shopComplete.setQueryAudit(true);
+        List<ShopComplete> shopCompletes = selectBySelective(shopComplete);
+        if (shopCompletes.isEmpty()) return null;
+        if (shopCompletes.size() > 1) throw new BaseException("数据异常");
+        return shopCompletes.get(0);
     }
 
 }

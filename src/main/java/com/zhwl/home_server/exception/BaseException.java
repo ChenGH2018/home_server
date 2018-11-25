@@ -2,7 +2,9 @@ package com.zhwl.home_server.exception;
 
 
 import com.zhwl.home_server.system.SysEnum;
+import lombok.Data;
 
+@Data
 public class BaseException extends RuntimeException {
     private Integer code;
 

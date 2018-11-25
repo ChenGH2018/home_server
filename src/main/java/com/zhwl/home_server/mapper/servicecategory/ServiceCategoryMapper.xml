@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.servicecategory.ServiceCategoryMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_service_category
+    </sql>
+
+    <sql id="field">
+        category_name,
+        category_icon,
+        category_img,
+        description,
+        is_delete,
+        add_time,
+        add_user,
+        update_time,
+        update_user,
+        id
+    </sql>
+    <sql id="aliasField">
+        sc.category_name AS  sc_category_name,
+        sc.category_icon AS  sc_category_icon,
+        sc.category_img AS  sc_category_img,
+        sc.description AS  sc_description,
+        sc.is_delete AS  sc_is_delete,
+        sc.add_time AS  sc_add_time,
+        sc.add_user AS  sc_add_user,
+        sc.update_time AS  sc_update_time,
+        sc.update_user AS  sc_update_user,
+        sc.id AS  sc_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="ServiceCategory">
+        <id column="sc_id" property="id"/>
+        <result column="sc_category_name" property="categoryName"/>
+        <result column="sc_category_icon" property="categoryIcon"/>
+        <result column="sc_category_img" property="categoryImg"/>
+        <result column="sc_description" property="description"/>
+        <result column="sc_is_delete" property="isDelete"/>
+        <result column="sc_add_time" property="addTime"/>
+        <result column="sc_add_user" property="addUser"/>
+        <result column="sc_update_time" property="updateTime"/>
+        <result column="sc_update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="ServiceCategory">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{categoryName},
+        #{categoryIcon},
+        #{categoryImg},
+        #{description},
+        #{isDelete},
+        #{addTime},
+        #{addUser},
+        #{updateTime},
+        #{updateUser},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="ServiceCategory">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="categoryName != null ">category_name=#{categoryName},</if>
+            <if test="categoryIcon != null ">category_icon=#{categoryIcon},</if>
+            <if test="categoryImg != null ">category_img=#{categoryImg},</if>
+            <if test="description != null ">description=#{description},</if>
+            <if test="isDelete != null ">is_delete=#{isDelete},</if>
+            <if test="addTime != null ">add_time=#{addTime},</if>
+            <if test="addUser != null ">add_user=#{addUser},</if>
+            <if test="updateTime != null ">update_time=#{updateTime},</if>
+            <if test="updateUser != null ">update_user=#{updateUser},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="ServiceCategory" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from
+        <include refid="tableName"/> AS sc
+        <where>
+            sc.is_delete = 0
+            <if test="categoryName != null and categoryName != ''">AND sc.category_name=#{categoryName}</if>
+            <if test="categoryIcon != null and categoryIcon != ''">AND sc.category_icon=#{categoryIcon}</if>
+            <if test="categoryImg != null and categoryImg != ''">AND sc.category_img=#{categoryImg}</if>
+            <if test="description != null and description != ''">AND sc.description=#{description}</if>
+            <if test="isDelete != null ">AND sc.is_delete=#{isDelete}</if>
+            <if test="addTime != null ">AND sc.add_time=#{addTime}</if>
+            <if test="addUser != null and addUser != ''">AND sc.add_user=#{addUser}</if>
+            <if test="updateTime != null ">AND sc.update_time=#{updateTime}</if>
+            <if test="updateUser != null and updateUser != ''">AND sc.update_user=#{updateUser}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getServiceCategoryByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from
+        <include refid="tableName"/>
+        AS sc
+        <where>
+            sc.is_delete = 0
+            <if test="pd.entity.categoryName != null and categoryName != ''">AND
+                sc.category_name=#{pd.entity.categoryName}
+            </if>
+            <if test="pd.entity.categoryIcon != null and categoryIcon != ''">AND
+                sc.category_icon=#{pd.entity.categoryIcon}
+            </if>
+            <if test="pd.entity.categoryImg != null and categoryImg != ''">AND
+                sc.category_img=#{pd.entity.categoryImg}
+            </if>
+            <if test="pd.entity.description != null and description != ''">AND sc.description=#{pd.entity.description}
+            </if>
+            <if test="pd.entity.isDelete != null ">AND sc.is_delete=#{pd.entity.isDelete}</if>
+            <if test="pd.entity.addTime != null ">AND sc.add_time=#{pd.entity.addTime}</if>
+            <if test="pd.entity.addUser != null and addUser != ''">AND sc.add_user=#{pd.entity.addUser}</if>
+            <if test="pd.entity.updateTime != null ">AND sc.update_time=#{pd.entity.updateTime}</if>
+            <if test="pd.entity.updateUser != null and updateUser != ''">AND sc.update_user=#{pd.entity.updateUser}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="ServiceCategory">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.categoryName},
+            #{t.categoryIcon},
+            #{t.categoryImg},
+            #{t.description},
+            #{t.isDelete},
+            #{t.addTime},
+            #{t.addUser},
+            #{t.updateTime},
+            #{t.updateUser},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <!--批量软删除操作-->
+    <update id="softDeleteArray" parameterType="String">
+        update
+        <include refid="tableName"/>
+        set
+        is_delete = 1
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

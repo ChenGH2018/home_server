@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 @Service("sysUserRoleServiceImpl")
@@ -23,5 +24,10 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Override
     public Integer deleteBySysUserId(String sysUserId) {
         return sysUserRoleMapper.deleteBySysUserId(sysUserId);
+    }
+
+    @Override
+    public Integer updateRole(HashMap<String, Object> map) {
+        return sysUserRoleMapper.updateRole(map);
     }
 }

@@ -147,15 +147,14 @@
         </foreach>
     </delete>
     <!--修改商家的角色、修改表：sys_user_role-->
-    <update id="auditShop" parameterType="map">
-        UPDATE sys_user_role AS sur
---         LEFT JOIN sys_user AS su  ON sur.sys_user_id = su.id
-        LEFT JOIN t_shop_basic AS sb on sur.sys_user_id = sb.sys_user_id
-        SET
-          sur.role_id = #{roleId}
-        WHERE
-          sb.id = #{shopId}}
-    </update>
+    <!--<update id="auditShop" parameterType="map">-->
+        <!--UPDATE <include refid="tableName"/>-->
+        <!--SET-->
+        <!--audit_status = #{auditStatus},-->
+        <!--audit_result = #{auditResult}-->
+        <!--WHERE-->
+        <!--shop_complete_id = #{shopCompleteId}-->
+    <!--</update>-->
     <!--修改商家审核状态-->
     <update id="updateAuditStatus" parameterType="ShopAudit">
         UPDATE <include refid="tableName"/>
@@ -164,7 +163,7 @@
           audit_result = #{auditResult}
         WHERE
           shop_complete_id = #{shopCompleteId}
-          AND audit_status = 1
-          AND audit_result = 2
+       /*   AND audit_status = 1
+          AND audit_result = 2*/
     </update>
 </mapper>

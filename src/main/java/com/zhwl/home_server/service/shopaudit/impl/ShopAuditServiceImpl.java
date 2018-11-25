@@ -9,6 +9,7 @@ import com.zhwl.home_server.mapper.shopaudit.ShopAuditMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
 import com.zhwl.home_server.service.shopaudit.ShopAuditService;
 import com.zhwl.home_server.service.system.RoleService;
+import com.zhwl.home_server.service.system.SysUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,8 @@ public class ShopAuditServiceImpl implements ShopAuditService {
     RoleService roleService;
     @Autowired
     ShopCompleteService shopCompleteService;
+    @Autowired
+    SysUserRoleService sysUserRoleService;
 
     @Override
     public Integer save(ShopAudit shopAudit) {
@@ -81,7 +84,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public Integer auditShop(ShopAudit shopAudit) {
-        if (Strings.isNullOrEmpty(shopAudit.getId()))
+        if (Strings.isNullOrEmpty(shopAudit.getShopCompleteId()))
             throw new BaseException("商家ID不能为空");
         if (shopAudit.getAuditStatus() != 1)
             throw new BaseException("审核结果必须是已审核");
@@ -107,7 +110,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
             HashMap<String, Object> map = new HashMap<>();
             map.put("shopId", shopAudit.getId());
             map.put("roleId", roles.get(0).getId());
-            return shopAuditMapper.auditShop(map);
+            return sysUserRoleService.updateRole(map);
         }
         return 0;
     }

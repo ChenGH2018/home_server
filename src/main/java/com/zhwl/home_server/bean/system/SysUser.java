@@ -1,5 +1,6 @@
 package com.zhwl.home_server.bean.system;
 
+import com.zhwl.home_server.bean.shop.ShopBasic;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,15 @@ public class SysUser implements UserDetails {
     private Integer isFreeze;//是否冻结 0：未冻结、1：已冻结
     private Integer isLogout;//是否注销 0：未注销、1：已注销
     private Integer isActivateEamil;//是否激活邮箱 0：未激活、1：已激活
+    private ShopBasic shopBasic;//用户为商家则返回商家的信息
+
+    public ShopBasic getShopBasic() {
+        return shopBasic;
+    }
+
+    public void setShopBasic(ShopBasic shopBasic) {
+        this.shopBasic = shopBasic;
+    }
 
     @ApiModelProperty(hidden = true)
     private Date addTime;  //添加时间
