@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Component
 @RabbitListener(queues = QueueName.EMAIL_VALIDATE_QUEUE)
-public class EmailConsumer implements ChannelAwareMessageListener {
+public class EmailConsumer{
 
     @Autowired
     JavaMailSender mailSender;
@@ -69,10 +69,5 @@ public class EmailConsumer implements ChannelAwareMessageListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onMessage(Message message, Channel channel) throws Exception {
-
     }
 }
