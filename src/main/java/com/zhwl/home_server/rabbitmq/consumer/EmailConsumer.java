@@ -6,6 +6,7 @@ import com.zhwl.home_server.util.MD5Utils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,7 +19,7 @@ import java.io.IOException;
 
 @Component
 @RabbitListener(queues = QueueName.EMAIL_VALIDATE_QUEUE)
-public class EmailConsumer {
+public class EmailConsumer implements ChannelAwareMessageListener {
 
     @Autowired
     JavaMailSender mailSender;
@@ -68,5 +69,10 @@ public class EmailConsumer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onMessage(Message message, Channel channel) throws Exception {
+
     }
 }
