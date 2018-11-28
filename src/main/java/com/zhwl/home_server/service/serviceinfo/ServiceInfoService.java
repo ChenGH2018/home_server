@@ -70,5 +70,8 @@ public interface ServiceInfoService {
         * @throws BaseException
         */
         Integer softDeleteArray(String[] ids) throws BaseException;
+
+
+
 }
 

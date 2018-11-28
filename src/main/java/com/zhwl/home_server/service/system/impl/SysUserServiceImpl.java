@@ -1,11 +1,13 @@
 package com.zhwl.home_server.service.system.impl;
 
 import com.zhwl.home_server.bean.Page;
+import com.zhwl.home_server.bean.customerservice.CustomerService;
 import com.zhwl.home_server.bean.shop.ShopBasic;
 import com.zhwl.home_server.bean.system.SysUser;
 import com.zhwl.home_server.bean.system.SysUserRole;
 import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.system.sysuser.SysUserMapper;
+import com.zhwl.home_server.service.customerservice.CustomerServiceService;
 import com.zhwl.home_server.service.shop.ShopBasicService;
 import com.zhwl.home_server.service.system.SysUserRoleService;
 import com.zhwl.home_server.service.system.SysUserService;
@@ -14,6 +16,7 @@ import com.zhwl.home_server.system.UserTypeEnum;
 import com.zhwl.home_server.util.SysUserUtil;
 import com.zhwl.home_server.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,16 +40,29 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserRoleService sysUserRoleService;
     @Autowired
     private ShopBasicService shopBasicService;
+    @Autowired
+    private CustomerServiceService customerServiceService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = Optional.ofNullable(username).map(x -> sysUserMapper.loadUserByUsername(x)).orElse(null);
         if (sysUser == null)
             throw new UsernameNotFoundException("用户名错误");
+        if (1 == sysUser.getIsFreeze())
+            throw new BadCredentialsException("该用户已冻结");
         if(sysUser.getUserType() == UserTypeEnum.SHOPUSER.getType()){
             ShopBasic shopBasic = new ShopBasic();
             shopBasic.setSysUserId(sysUser.getId());
             sysUser.setShopBasic(shopBasicService.selectBySelective(shopBasic).get(0));
         }
+        if(sysUser.getUserType() == UserTypeEnum.CS.getType()){
+            CustomerService customerService = new CustomerService();
+            customerService.setSysUserId(sysUser.getId());
+            List<CustomerService> customerServiceList = customerServiceService.selectBySelective(customerService);
+            if(1 == customerServiceList.get(0).getIsDelete())
+                throw new BadCredentialsException("用户已被删除");
+        }
+
         return sysUser;
     }
 

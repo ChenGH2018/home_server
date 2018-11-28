@@ -12,42 +12,48 @@
     <sql id="field">
         username,
         password,
-        name,
+        full_name,
         phone,
         email,
         address,
-        is_freezeze,
+        is_freeze,
+        is_delete,
         add_time,
         update_time,
         sys_user_id,
+        shop_basic_id,
         id
     </sql>
     <sql id="aliasField">
         cs.username AS  cs_username,
         cs.password AS  cs_password,
-        cs.name AS  cs_name,
+        cs.full_name AS  cs_full_name,
         cs.phone AS  cs_phone,
         cs.email AS  cs_email,
         cs.address AS  cs_address,
-        cs.is_freezeze AS  cs_is_freezeze,
+        cs.is_freeze AS  cs_is_freeze,
+        cs.is_delete AS cs_is_delete,
         cs.add_time AS  cs_add_time,
         cs.update_time AS  cs_update_time,
         cs.sys_user_id AS  cs_sys_user_id,
+        cs.shop_basic_id AS cs_shop_basic_id,
         cs.id AS  cs_id
         </sql>
 
     <resultMap id="baseResultMap" type="CustomerService">
         <id column="cs_id" property="id"/>
-        <result column="cs_username" property="username"/>
-        <result column="cs_password" property="password"/>
-        <result column="cs_name" property="name"/>
+        <result column="su_username" property="username"/>
+        <result column="su_password" property="password"/>
+        <result column="su_full_name" property="fullName"/>
         <result column="cs_phone" property="phone"/>
         <result column="cs_email" property="email"/>
         <result column="cs_address" property="address"/>
-        <result column="cs_is_freezeze" property="isFreeze"/>
+        <result column="su_is_freeze" property="isFreeze"/>
+        <result column="cs_is_delete" property="isDelete"/>
         <result column="cs_add_time" property="addTime"/>
         <result column="cs_update_time" property="updateTime"/>
         <result column="cs_sys_user_id" property="sysUserId"/>
+        <result column="cs_shop_basic_id" property="shopBasicId"/>
     </resultMap>
 
     <!-- 新增-->
@@ -59,14 +65,16 @@
         (
         #{username},
         #{password},
-        #{name},
+        #{fullName},
         #{phone},
         #{email},
         #{address},
         #{isFreeze},
+        #{isDelete},
         #{addTime},
         #{updateTime},
         #{sysUserId},
+        #{shopBasicId},
         #{id}
         )
     </insert>
@@ -74,63 +82,65 @@
     <!--修改-->
     <update id="updateBySelective" parameterType="CustomerService">
         update
-        <include refid="tableName"/>
+        <include refid="tableName"/> AS cs  LEFT JOIN sys_user AS su ON cs.sys_user_id = su.id
         <set>
-            <if test="username != null ">username=#{username},</if>
-            <if test="password != null ">password=#{password},</if>
-            <if test="name != null ">name=#{name},</if>
-            <if test="phone != null ">phone=#{phone},</if>
-            <if test="email != null ">email=#{email},</if>
-            <if test="address != null ">address=#{address},</if>
-            <if test="isFreeze != null ">is_freezeze=#{isFreeze},</if>
-            <if test="addTime != null ">add_time=#{addTime},</if>
-            <if test="updateTime != null ">update_time=#{updateTime},</if>
-            <if test="sysUserId != null ">sys_user_id=#{sysUserId},</if>
+            <if test="username != null ">su.username=#{username},</if>
+            <if test="password != null ">su.password=#{password},</if>
+            <if test="fullName != null ">su.name=#{fullName},</if>
+            <if test="phone != null ">cs.phone=#{phone},</if>
+            <if test="email != null ">cs.email=#{email},</if>
+            <if test="address != null ">cs.address=#{address},</if>
+            <if test="isFreeze != null ">su.is_freeze=#{isFreeze},</if>
+            <if test="isDelete != null ">cs.is_delete=#{isDelete},</if>
+            <if test="addTime != null ">cs.add_time=#{addTime},</if>
+            <if test="updateTime != null ">cs.update_time=#{updateTime},</if>
         </set>
         WHERE
-        id=#{id}
+        cs.id=#{id}
     </update>
     <!--条件查询所有-->
     <select id="selectBySelective" parameterType="CustomerService" resultMap="baseResultMap">
         select
+        su.username AS su_username,su.password AS su_password, su.name AS su_full_name,su.is_freeze AS su_is_freeze,
         <include refid="aliasField"/>
         from
-        <include refid="tableName"/>
-        AS cs
+        <include refid="tableName"/> AS cs LEFT JOIN sys_user AS su ON cs.sys_user_id = su.id
         <where>
-            cs.is_freeze = 0
-            <if test="username != null and username != ''">AND cs.username=#{username}</if>
-            <if test="password != null and password != ''">AND cs.password=#{password}</if>
-            <if test="name != null and name != ''">AND cs.name=#{name}</if>
+            cs.is_delete = 0
+            <if test="username != null and username != ''">AND su.username LIKE concat('%',#{username},'%')</if>
+            <if test="password != null and password != ''">AND su.password=#{password}</if>
+            <if test="fullName != null and fullName != ''">AND su.name LIKE concat('%',#{fullName},'%')</if>
             <if test="phone != null and phone != ''">AND cs.phone=#{phone}</if>
             <if test="email != null and email != ''">AND cs.email=#{email}</if>
             <if test="address != null and address != ''">AND cs.address=#{address}</if>
-            <if test="isFreeze != null ">AND cs.is_freeze=#{isFreeze}</if>
+            <if test="isFreeze != null ">AND su.is_freeze=#{isFreeze}</if>
             <if test="addTime != null ">AND cs.add_time=#{addTime}</if>
             <if test="updateTime != null ">AND cs.update_time=#{updateTime}</if>
             <if test="sysUserId != null and sysUserId != ''">AND cs.sys_user_id=#{sysUserId}</if>
+            <if test="shopBasicId != null and shopBasicId != ''">AND cs.shop_basic_id=#{shopBasicId}</if>
         </where>
     </select>
 
     <!--条件查询分页-->
     <select id="getCustomerServiceByPage" parameterType="Page" resultMap="baseResultMap">
         select
+        su.username AS su_username,su.password AS su_password, su.name AS su_full_name,su.is_freeze AS su_is_freeze,
         <include refid="aliasField"/>
         from
-        <include refid="tableName"/>
-        AS cs
+        <include refid="tableName"/> AS cs LEFT JOIN sys_user AS su ON cs.sys_user_id = su.id
         <where>
-            cs.is_freeze = 0
-            <if test="pd.entity.username != null and username != ''">AND cs.username=#{pd.entity.username}</if>
-            <if test="pd.entity.password != null and password != ''">AND cs.password=#{pd.entity.password}</if>
-            <if test="pd.entity.name != null and name != ''">AND cs.name=#{pd.entity.name}</if>
-            <if test="pd.entity.phone != null and phone != ''">AND cs.phone=#{pd.entity.phone}</if>
-            <if test="pd.entity.email != null and email != ''">AND cs.email=#{pd.entity.email}</if>
-            <if test="pd.entity.address != null and address != ''">AND cs.address=#{pd.entity.address}</if>
-            <if test="pd.entity.isFreeze != null ">AND cs.is_freeze=#{pd.entity.isFreeze}</if>
+            cs.is_delete = 0
+            <if test="pd.entity.username != null and pd.entity.username != ''">AND su.username LIKE concat('%',#{pd.entity.username},'%')</if>
+            <if test="pd.entity.password != null and pd.entity.password != ''">AND su.password=#{pd.entity.password}</if>
+            <if test="pd.entity.fullName != null and pd.entity.fullName != ''">AND su.name LIKE concat('%',#{pd.entity.fullName},'%')</if>
+            <if test="pd.entity.phone != null and pd.entity.phone != ''">AND cs.phone=#{pd.entity.phone}</if>
+            <if test="pd.entity.email != null and pd.entity.email != ''">AND cs.email=#{pd.entity.email}</if>
+            <if test="pd.entity.address != null and pd.entity.address != ''">AND cs.address=#{pd.entity.address}</if>
+            <if test="pd.entity.isFreeze != null ">AND su.is_freeze=#{pd.entity.isFreeze}</if>
             <if test="pd.entity.addTime != null ">AND cs.add_time=#{pd.entity.addTime}</if>
             <if test="pd.entity.updateTime != null ">AND cs.update_time=#{pd.entity.updateTime}</if>
-            <if test="pd.entity.sysUserId != null and sysUserId != ''">AND cs.sys_user_id=#{pd.entity.sysUserId}</if>
+            <if test="pd.entity.sysUserId != null and pd.entity.sysUserId != ''">AND cs.sys_user_id=#{pd.entity.sysUserId}</if>
+            <if test="pd.entity.shopBasicId != null and pd.entity.shopBasicId != ''">AND cs.shop_basic_id=#{pd.entity.shopBasicId}</if>
         </where>
     </select>
 
@@ -144,14 +154,16 @@
             (
             #{t.username},
             #{t.password},
-            #{t.name},
+            #{t.fullName},
             #{t.phone},
             #{t.email},
             #{t.address},
             #{t.isFreeze},
+            #{t.isDelete},
             #{t.addTime},
             #{t.updateTime},
             #{t.sysUserId},
+            #{t.shopBasicId},
             #{t.id}
             )
         </foreach>
@@ -167,4 +179,17 @@
             #{item}
         </foreach>
     </delete>
+
+    <!--批量软删除操作-->
+    <update id="softDeleteArray" parameterType="String">
+        update
+        <include refid="tableName"/>
+        set
+        is_delete = 1
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

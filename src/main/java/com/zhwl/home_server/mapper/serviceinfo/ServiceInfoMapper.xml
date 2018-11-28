@@ -49,7 +49,7 @@
         <result column="si_service_name" property="serviceName"/>
         <result column="si_service_icon" property="serviceIcon"/>
         <result column="si_service_img" property="serviceImg"/>
-        <result column="si_service_img_key" property="serviceImgKey"/>
+        <result column="si_service_img_key" property="serviceImgKey" javaType="string"/>
         <result column="si_price" property="price"/>
         <result column="si_price_unit" property="priceUnit"/>
         <result column="si_service_content" property="serviceContent"/>

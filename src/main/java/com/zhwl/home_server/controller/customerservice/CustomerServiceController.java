@@ -5,13 +5,14 @@ import com.zhwl.home_server.bean.ResultVo;
 import com.zhwl.home_server.bean.customerservice.CustomerService;
 import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.service.customerservice.CustomerServiceService;
-import com.zhwl.home_server.util.UuidUtil;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Author: chenguihao
@@ -27,17 +28,6 @@ public class CustomerServiceController {
     private CustomerServiceService customerServiceService;
 
 
-    @ApiOperation(value = "添加", notes = "添加")
-    @PostMapping("save")
-    public ResultVo save(@RequestBody CustomerService customerService) {
-        try {
-            customerService.setId(UuidUtil.get32UUID());
-            return ResultVo.ok(customerServiceService.save(customerService));
-        } catch (BaseException e) {
-            e.printStackTrace();
-            return ResultVo.fail(e.getCode(), e.getMessage());
-        }
-    }
 
 
     @ApiOperation(value = "修改", notes = "修改")
@@ -107,11 +97,22 @@ public class CustomerServiceController {
         }
     }
 
-    @ApiOperation(value = "添加商家客服", notes = "传3个属性：username/password/customerService、customerService为实体类对象")
-    @PostMapping("addCustomerService")
-    public ResultVo addCustomerService(@ApiParam(name = "map",value = "传3个属性：username/password/customerService、customerService为实体类对象",type = "Map") Map<String,Object>map) {
+    @ApiOperation(value = "软删除一个或多个", notes = "软删除一个或多个")
+    @DeleteMapping("softDeleteByIds/{ids}")
+    public ResultVo softDeleteByIds(@PathVariable String ids) {
         try {
-            return ResultVo.ok(customerServiceService.addCustomerService(map));
+            return ResultVo.ok(customerServiceService.softDeleteArray(ids.split(",")));
+        } catch (BaseException e) {
+            e.printStackTrace();
+            return ResultVo.fail(e.getCode(),e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "添加商家客服", notes = "添加商家客服")
+    @PostMapping("save")
+    public ResultVo save(@RequestBody CustomerService customerService) {
+        try {
+            return ResultVo.ok(customerServiceService.addCustomerService(customerService));
         } catch (BaseException e) {
             e.printStackTrace();
             return ResultVo.fail(e.getCode(), e.getMessage());
