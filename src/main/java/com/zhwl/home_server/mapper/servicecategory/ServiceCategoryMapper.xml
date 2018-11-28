@@ -13,6 +13,7 @@
         category_name,
         category_icon,
         category_img,
+        category_img_key,
         description,
         is_delete,
         add_time,
@@ -25,6 +26,7 @@
         sc.category_name AS  sc_category_name,
         sc.category_icon AS  sc_category_icon,
         sc.category_img AS  sc_category_img,
+        sc.category_img_key AS  sc_category_img_key,
         sc.description AS  sc_description,
         sc.is_delete AS  sc_is_delete,
         sc.add_time AS  sc_add_time,
@@ -39,6 +41,7 @@
         <result column="sc_category_name" property="categoryName"/>
         <result column="sc_category_icon" property="categoryIcon"/>
         <result column="sc_category_img" property="categoryImg"/>
+        <result column="sc_category_img_key" property="categoryImgKey"/>
         <result column="sc_description" property="description"/>
         <result column="sc_is_delete" property="isDelete"/>
         <result column="sc_add_time" property="addTime"/>
@@ -57,6 +60,7 @@
         #{categoryName},
         #{categoryIcon},
         #{categoryImg},
+        #{categoryImgKey},
         #{description},
         #{isDelete},
         #{addTime},
@@ -75,6 +79,7 @@
             <if test="categoryName != null ">category_name=#{categoryName},</if>
             <if test="categoryIcon != null ">category_icon=#{categoryIcon},</if>
             <if test="categoryImg != null ">category_img=#{categoryImg},</if>
+            <if test="categoryImgKey != null ">category_img_key=#{categoryImgKey},</if>
             <if test="description != null ">description=#{description},</if>
             <if test="isDelete != null ">is_delete=#{isDelete},</if>
             <if test="addTime != null ">add_time=#{addTime},</if>
@@ -90,7 +95,8 @@
         select
         <include refid="aliasField"/>
         from
-        <include refid="tableName"/> AS sc
+        <include refid="tableName"/>
+        AS sc
         <where>
             sc.is_delete = 0
             <if test="categoryName != null and categoryName != ''">AND sc.category_name=#{categoryName}</if>
@@ -144,6 +150,7 @@
             #{t.categoryName},
             #{t.categoryIcon},
             #{t.categoryImg},
+            #{t.categoryImgKey},
             #{t.description},
             #{t.isDelete},
             #{t.addTime},

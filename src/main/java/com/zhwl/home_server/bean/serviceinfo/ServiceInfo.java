@@ -21,6 +21,7 @@ public class ServiceInfo extends BaseBean {
     private String serviceName; //服务名
     private String serviceIcon; //服务图标
     private String serviceImg;  //服务图片URL
+    private String serviceImgKey;//服务图片key
     private Double price;       //服务价格
     private String priceUnit;   //服务单元
     private String serviceContent; //服务说明

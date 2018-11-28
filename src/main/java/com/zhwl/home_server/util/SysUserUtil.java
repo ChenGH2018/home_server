@@ -34,7 +34,7 @@ public class SysUserUtil {
     public static ShopBasic getCurrentShopBasic() {
         SysUser currentUser = getCurrentUser();
         if (currentUser.getUserType() == null || currentUser.getUserType() != UserTypeEnum.SHOPUSER.getType())
-            return new ShopBasic();
+            return null;
         return currentUser.getShopBasic();
     }
     public static String getCurrentShopBasicId() {

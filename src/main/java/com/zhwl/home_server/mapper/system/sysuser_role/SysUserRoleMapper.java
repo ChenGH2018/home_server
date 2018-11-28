@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface SysUserRoleMapper {
     Integer saveByList(List<SysUserRole> list);
+    Integer save(SysUserRole sysUserRole);
     Integer deleteBySysUserId(String sysUserId);
 
     Integer updateRole(HashMap<String, Object> map);

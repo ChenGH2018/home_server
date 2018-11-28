@@ -99,9 +99,13 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
      */
     public Boolean analysisKey(List<ServiceCategory> serviceCategories){
         serviceCategories.stream().parallel().forEach(it -> {
-            if (!Strings.isNullOrEmpty(it.getCategoryImg())) {
+            if (!Strings.isNullOrEmpty(it.getCategoryImgKey())) {
                 try {
-                    it.setCategoryImg(QiNiuUtil.getDownloadUrl(it.getCategoryImg()));
+                    String[] categoryImgKeys = it.getCategoryImgKey().split(",");
+                    it.setCategoryImg("");
+                    for(int i = 0 ;i<categoryImgKeys.length;i++){
+                        it.setCategoryImg(it.getCategoryImg()+QiNiuUtil.getDownloadUrl(categoryImgKeys[i])+(i==categoryImgKeys.length-1? "":","));
+                    }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

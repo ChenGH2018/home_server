@@ -36,6 +36,19 @@
         </foreach>
     </insert>
 
+    <!-- 新增-->
+    <insert id="save" parameterType="SysUserRole">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="Field"/>)
+        VALUES
+            (
+            #{sysUserId},
+            #{roleId},
+            #{id}
+            )
+    </insert>
+
     <!--批量删除操作-->
     <delete id="deleteBySysUserId" parameterType="String">
         delete from

@@ -13,6 +13,7 @@
         service_name,
         service_icon,
         service_img,
+        service_img_key,
         price,
         price_unit,
         service_content,
@@ -29,6 +30,7 @@
         si.service_name AS  si_service_name,
         si.service_icon AS  si_service_icon,
         si.service_img AS  si_service_img,
+        si.service_img_key AS  si_service_img_key,
         si.price AS  si_price,
         si.price_unit AS  si_price_unit,
         si.service_content AS  si_service_content,
@@ -47,6 +49,7 @@
         <result column="si_service_name" property="serviceName"/>
         <result column="si_service_icon" property="serviceIcon"/>
         <result column="si_service_img" property="serviceImg"/>
+        <result column="si_service_img_key" property="serviceImgKey"/>
         <result column="si_price" property="price"/>
         <result column="si_price_unit" property="priceUnit"/>
         <result column="si_service_content" property="serviceContent"/>
@@ -69,6 +72,7 @@
         #{serviceName},
         #{serviceIcon},
         #{serviceImg},
+        #{serviceImgKey},
         #{price},
         #{priceUnit},
         #{serviceContent},
@@ -88,19 +92,20 @@
         update
         <include refid="tableName"/>
         <set>
-        <if test="serviceName != null ">service_name=#{serviceName},</if>
-        <if test="serviceIcon != null ">service_icon=#{serviceIcon},</if>
-        <if test="serviceImg != null ">service_img=#{serviceImg},</if>
-        <if test="price != null ">price=#{price},</if>
-        <if test="priceUnit != null ">price_unit=#{priceUnit},</if>
-        <if test="serviceContent != null ">service_content=#{serviceContent},</if>
-        <if test="remark != null ">remark=#{remark},</if>
-        <if test="isOnline != null ">is_online=#{isOnline},</if>
-        <if test="serviceCategoryId != null ">service_category_id=#{serviceCategoryId},</if>
-        <if test="shopBasicId != null ">shop_basic_id=#{shopBasicId},</if>
-        <if test="isDelete != null ">is_delete=#{isDelete},</if>
-        <if test="addTime != null ">add_time=#{addTime},</if>
-        <if test="updateTime != null ">update_time=#{updateTime},</if>
+            <if test="serviceName != null ">service_name=#{serviceName},</if>
+            <if test="serviceIcon != null ">service_icon=#{serviceIcon},</if>
+            <if test="serviceImg != null ">service_img=#{serviceImg},</if>
+            <if test="serviceImgKey != null ">service_img_key=#{serviceImgKey},</if>
+            <if test="price != null ">price=#{price},</if>
+            <if test="priceUnit != null ">price_unit=#{priceUnit},</if>
+            <if test="serviceContent != null ">service_content=#{serviceContent},</if>
+            <if test="remark != null ">remark=#{remark},</if>
+            <if test="isOnline != null ">is_online=#{isOnline},</if>
+            <if test="serviceCategoryId != null ">service_category_id=#{serviceCategoryId},</if>
+            <if test="shopBasicId != null ">shop_basic_id=#{shopBasicId},</if>
+            <if test="isDelete != null ">is_delete=#{isDelete},</if>
+            <if test="addTime != null ">add_time=#{addTime},</if>
+            <if test="updateTime != null ">update_time=#{updateTime},</if>
         </set>
         WHERE
         id=#{id}
@@ -109,22 +114,26 @@
     <select id="selectBySelective" parameterType="ServiceInfo" resultMap="baseResultMap">
         select
         <include refid="aliasField"/>
-        from <include refid="tableName"/> AS si
+        from
+        <include refid="tableName"/>
+        AS si
         <where>
-          si.is_delete = 0
-         <if test="serviceName != null and serviceName != ''">AND si.service_name=#{serviceName}</if>
-         <if test="serviceIcon != null and serviceIcon != ''">AND si.service_icon=#{serviceIcon}</if>
-         <if test="serviceImg != null and serviceImg != ''">AND si.service_img=#{serviceImg}</if>
-         <if test="price != null ">AND si.price=#{price}</if>
-         <if test="priceUnit != null and priceUnit != ''">AND si.price_unit=#{priceUnit}</if>
-         <if test="serviceContent != null and serviceContent != ''">AND si.service_content=#{serviceContent}</if>
-         <if test="remark != null and remark != ''">AND si.remark=#{remark}</if>
-         <if test="isOnline != null ">AND si.is_online=#{isOnline}</if>
-         <if test="serviceCategoryId != null and serviceCategoryId != ''">AND si.service_category_id=#{serviceCategoryId}</if>
-         <if test="shopBasicId != null and shopBasicId != ''">AND si.shop_basic_id=#{shopBasicId}</if>
-         <if test="isDelete != null ">AND si.is_delete=#{isDelete}</if>
-         <if test="addTime != null ">AND si.add_time=#{addTime}</if>
-         <if test="updateTime != null ">AND si.update_time=#{updateTime}</if>
+            si.is_delete = 0
+            <if test="serviceName != null and serviceName != ''">AND si.service_name=#{serviceName}</if>
+            <if test="serviceIcon != null and serviceIcon != ''">AND si.service_icon=#{serviceIcon}</if>
+            <if test="serviceImg != null and serviceImg != ''">AND si.service_img=#{serviceImg}</if>
+            <if test="price != null ">AND si.price=#{price}</if>
+            <if test="priceUnit != null and priceUnit != ''">AND si.price_unit=#{priceUnit}</if>
+            <if test="serviceContent != null and serviceContent != ''">AND si.service_content=#{serviceContent}</if>
+            <if test="remark != null and remark != ''">AND si.remark=#{remark}</if>
+            <if test="isOnline != null ">AND si.is_online=#{isOnline}</if>
+            <if test="serviceCategoryId != null and serviceCategoryId != ''">AND
+                si.service_category_id=#{serviceCategoryId}
+            </if>
+            <if test="shopBasicId != null and shopBasicId != ''">AND si.shop_basic_id=#{shopBasicId}</if>
+            <if test="isDelete != null ">AND si.is_delete=#{isDelete}</if>
+            <if test="addTime != null ">AND si.add_time=#{addTime}</if>
+            <if test="updateTime != null ">AND si.update_time=#{updateTime}</if>
         </where>
     </select>
 
@@ -132,22 +141,38 @@
     <select id="getServiceInfoByPage" parameterType="Page" resultMap="baseResultMap">
         select
         <include refid="aliasField"/>
-        from <include refid="tableName"/> AS si
+        from
+        <include refid="tableName"/>
+        AS si
         <where>
-        si.is_delete = 0
-        <if test="pd.entity.serviceName != null and serviceName != ''">AND si.service_name=#{pd.entity.serviceName}</if>
-        <if test="pd.entity.serviceIcon != null and serviceIcon != ''">AND si.service_icon=#{pd.entity.serviceIcon}</if>
-        <if test="pd.entity.serviceImg != null and serviceImg != ''">AND si.service_img=#{pd.entity.serviceImg}</if>
-        <if test="pd.entity.price != null ">AND si.price=#{pd.entity.price}</if>
-        <if test="pd.entity.priceUnit != null and priceUnit != ''">AND si.price_unit=#{pd.entity.priceUnit}</if>
-        <if test="pd.entity.serviceContent != null and serviceContent != ''">AND si.service_content=#{pd.entity.serviceContent}</if>
-        <if test="pd.entity.remark != null and remark != ''">AND si.remark=#{pd.entity.remark}</if>
-        <if test="pd.entity.isOnline != null ">AND si.is_online=#{pd.entity.isOnline}</if>
-        <if test="pd.entity.serviceCategoryId != null and serviceCategoryId != ''">AND si.service_category_id=#{pd.entity.serviceCategoryId}</if>
-        <if test="pd.entity.shopBasicId != null and shopBasicId != ''">AND si.shop_basic_id=#{pd.entity.shopBasicId}</if>
-        <if test="pd.entity.isDelete != null ">AND si.is_delete=#{pd.entity.isDelete}</if>
-        <if test="pd.entity.addTime != null ">AND si.add_time=#{pd.entity.addTime}</if>
-        <if test="pd.entity.updateTime != null ">AND si.update_time=#{pd.entity.updateTime}</if>
+            si.is_delete = 0
+            <if test="pd.entity.serviceName != null and pd.entity.serviceName != ''">AND UPPER(si.service_name) LIKE
+                UPPER(concat('%',#{pd.entity.serviceName},'%'))
+            </if>
+            <if test="pd.entity.serviceIcon != null and pd.entity.serviceIcon != ''">AND
+                si.service_icon=#{pd.entity.serviceIcon}
+            </if>
+            <if test="pd.entity.serviceImg != null and pd.entity.serviceImg != ''">AND
+                si.service_img=#{pd.entity.serviceImg}
+            </if>
+            <if test="pd.entity.price != null ">AND si.price=#{pd.entity.price}</if>
+            <if test="pd.entity.priceUnit != null and pd.entity.priceUnit != ''">AND
+                si.price_unit=#{pd.entity.priceUnit}
+            </if>
+            <if test="pd.entity.serviceContent != null and pd.entity.serviceContent != ''">AND
+                si.service_content=#{pd.entity.serviceContent}
+            </if>
+            <if test="pd.entity.remark != null and pd.entity.remark != ''">AND si.remark=#{pd.entity.remark}</if>
+            <if test="pd.entity.isOnline != null ">AND si.is_online=#{pd.entity.isOnline}</if>
+            <if test="pd.entity.serviceCategoryId != null and pd.entity.serviceCategoryId != ''">AND
+                si.service_category_id=#{pd.entity.serviceCategoryId}
+            </if>
+            <if test="pd.entity.shopBasicId != null and pd.entity.shopBasicId != ''">AND
+                si.shop_basic_id=#{pd.entity.shopBasicId}
+            </if>
+            <if test="pd.entity.isDelete != null ">AND si.is_delete=#{pd.entity.isDelete}</if>
+            <if test="pd.entity.addTime != null ">AND si.add_time=#{pd.entity.addTime}</if>
+            <if test="pd.entity.updateTime != null ">AND si.update_time=#{pd.entity.updateTime}</if>
         </where>
     </select>
 
@@ -162,6 +187,7 @@
             #{t.serviceName},
             #{t.serviceIcon},
             #{t.serviceImg},
+            #{t.serviceImgKey},
             #{t.price},
             #{t.priceUnit},
             #{t.serviceContent},
@@ -184,18 +210,19 @@
         where
         id in
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-        #{item}
+            #{item}
         </foreach>
     </delete>
     <!--批量软删除操作-->
     <update id="softDeleteArray" parameterType="String">
-        update <include refid="tableName"/>
+        update
+        <include refid="tableName"/>
         set
         is_delete = 1
         where
         id in
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-        #{item}
+            #{item}
         </foreach>
     </update>
 </mapper>

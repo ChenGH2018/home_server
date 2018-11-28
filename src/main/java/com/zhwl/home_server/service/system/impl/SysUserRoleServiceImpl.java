@@ -22,6 +22,11 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     }
 
     @Override
+    public Integer save(SysUserRole sysUserRole) {
+        return sysUserRoleMapper.save(sysUserRole);
+    }
+
+    @Override
     public Integer deleteBySysUserId(String sysUserId) {
         return sysUserRoleMapper.deleteBySysUserId(sysUserId);
     }

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.customerservice.CustomerServiceMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_customer_service
+    </sql>
+
+    <sql id="field">
+        username,
+        password,
+        name,
+        phone,
+        email,
+        address,
+        is_freezeze,
+        add_time,
+        update_time,
+        sys_user_id,
+        id
+    </sql>
+    <sql id="aliasField">
+        cs.username AS  cs_username,
+        cs.password AS  cs_password,
+        cs.name AS  cs_name,
+        cs.phone AS  cs_phone,
+        cs.email AS  cs_email,
+        cs.address AS  cs_address,
+        cs.is_freezeze AS  cs_is_freezeze,
+        cs.add_time AS  cs_add_time,
+        cs.update_time AS  cs_update_time,
+        cs.sys_user_id AS  cs_sys_user_id,
+        cs.id AS  cs_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="CustomerService">
+        <id column="cs_id" property="id"/>
+        <result column="cs_username" property="username"/>
+        <result column="cs_password" property="password"/>
+        <result column="cs_name" property="name"/>
+        <result column="cs_phone" property="phone"/>
+        <result column="cs_email" property="email"/>
+        <result column="cs_address" property="address"/>
+        <result column="cs_is_freezeze" property="isFreeze"/>
+        <result column="cs_add_time" property="addTime"/>
+        <result column="cs_update_time" property="updateTime"/>
+        <result column="cs_sys_user_id" property="sysUserId"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="CustomerService">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{username},
+        #{password},
+        #{name},
+        #{phone},
+        #{email},
+        #{address},
+        #{isFreeze},
+        #{addTime},
+        #{updateTime},
+        #{sysUserId},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="CustomerService">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="username != null ">username=#{username},</if>
+            <if test="password != null ">password=#{password},</if>
+            <if test="name != null ">name=#{name},</if>
+            <if test="phone != null ">phone=#{phone},</if>
+            <if test="email != null ">email=#{email},</if>
+            <if test="address != null ">address=#{address},</if>
+            <if test="isFreeze != null ">is_freezeze=#{isFreeze},</if>
+            <if test="addTime != null ">add_time=#{addTime},</if>
+            <if test="updateTime != null ">update_time=#{updateTime},</if>
+            <if test="sysUserId != null ">sys_user_id=#{sysUserId},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="CustomerService" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from
+        <include refid="tableName"/>
+        AS cs
+        <where>
+            cs.is_freeze = 0
+            <if test="username != null and username != ''">AND cs.username=#{username}</if>
+            <if test="password != null and password != ''">AND cs.password=#{password}</if>
+            <if test="name != null and name != ''">AND cs.name=#{name}</if>
+            <if test="phone != null and phone != ''">AND cs.phone=#{phone}</if>
+            <if test="email != null and email != ''">AND cs.email=#{email}</if>
+            <if test="address != null and address != ''">AND cs.address=#{address}</if>
+            <if test="isFreeze != null ">AND cs.is_freeze=#{isFreeze}</if>
+            <if test="addTime != null ">AND cs.add_time=#{addTime}</if>
+            <if test="updateTime != null ">AND cs.update_time=#{updateTime}</if>
+            <if test="sysUserId != null and sysUserId != ''">AND cs.sys_user_id=#{sysUserId}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getCustomerServiceByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from
+        <include refid="tableName"/>
+        AS cs
+        <where>
+            cs.is_freeze = 0
+            <if test="pd.entity.username != null and username != ''">AND cs.username=#{pd.entity.username}</if>
+            <if test="pd.entity.password != null and password != ''">AND cs.password=#{pd.entity.password}</if>
+            <if test="pd.entity.name != null and name != ''">AND cs.name=#{pd.entity.name}</if>
+            <if test="pd.entity.phone != null and phone != ''">AND cs.phone=#{pd.entity.phone}</if>
+            <if test="pd.entity.email != null and email != ''">AND cs.email=#{pd.entity.email}</if>
+            <if test="pd.entity.address != null and address != ''">AND cs.address=#{pd.entity.address}</if>
+            <if test="pd.entity.isFreeze != null ">AND cs.is_freeze=#{pd.entity.isFreeze}</if>
+            <if test="pd.entity.addTime != null ">AND cs.add_time=#{pd.entity.addTime}</if>
+            <if test="pd.entity.updateTime != null ">AND cs.update_time=#{pd.entity.updateTime}</if>
+            <if test="pd.entity.sysUserId != null and sysUserId != ''">AND cs.sys_user_id=#{pd.entity.sysUserId}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="CustomerService">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.username},
+            #{t.password},
+            #{t.name},
+            #{t.phone},
+            #{t.email},
+            #{t.address},
+            #{t.isFreeze},
+            #{t.addTime},
+            #{t.updateTime},
+            #{t.sysUserId},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

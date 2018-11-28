@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.unitmanagement.UnitManagementMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_unit_management
+    </sql>
+
+    <sql id="field">
+        unit_name,
+        description,
+        id
+    </sql>
+    <sql id="aliasField">
+        um.unit_name AS  um_unit_name,
+        um.description AS  um_description,
+        um.id AS  um_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="UnitManagement">
+        <id column="um_id" property="id"/>
+        <result column="um_unit_name" property="unitName"/>
+        <result column="um_description" property="description"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="UnitManagement">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{unitName},
+        #{description},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="UnitManagement">
+        update
+        <include refid="tableName"/>
+        <set>
+        <if test="unitName != null ">unit_name=#{unitName},</if>
+        <if test="description != null ">description=#{description},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="UnitManagement" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS um
+        <where>
+         <if test="unitName != null and unitName != ''">AND um.unit_name=#{unitName}</if>
+         <if test="description != null and description != ''">AND um.description=#{description}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getUnitManagementByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS um
+        <where>
+        <if test="pd.entity.unitName != null and unitName != ''">AND um.unit_name=#{pd.entity.unitName}</if>
+        <if test="pd.entity.description != null and description != ''">AND um.description=#{pd.entity.description}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="UnitManagement">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.unitName},
+            #{t.description},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+</mapper>

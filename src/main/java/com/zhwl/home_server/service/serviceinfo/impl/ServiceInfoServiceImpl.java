@@ -32,7 +32,7 @@ public class ServiceInfoServiceImpl implements ServiceInfoService {
     @Override
     public Integer save(ServiceInfo serviceInfo) throws BaseException {
         serviceInfo.setIsDelete(0);
-        if(serviceInfo.getIsOnline() == null )serviceInfo.setIsOnline(0);
+        if (serviceInfo.getIsOnline() == null) serviceInfo.setIsOnline(0);
         return serviceInfoMapper.save(serviceInfo);
     }
 
@@ -102,9 +102,13 @@ public class ServiceInfoServiceImpl implements ServiceInfoService {
      */
     public Boolean analysisKey(List<ServiceInfo> ServiceInfos) {
         ServiceInfos.stream().parallel().forEach(it -> {
-            if (!Strings.isNullOrEmpty(it.getServiceImg())) {
+            if (!Strings.isNullOrEmpty(it.getServiceImgKey())) {
                 try {
-                    it.setServiceImg(QiNiuUtil.getDownloadUrl(it.getServiceImg()));
+                    String[] serviceImgKeys = it.getServiceImgKey().split(",");
+                    it.setServiceImg("");
+                    for (int i = 0; i < serviceImgKeys.length; i++) {
+                        it.setServiceImg(it.getServiceImg() + QiNiuUtil.getDownloadUrl(serviceImgKeys[i]) + (i == serviceImgKeys.length - 1 ? "" : ","));
+                    }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

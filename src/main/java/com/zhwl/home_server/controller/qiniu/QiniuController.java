@@ -7,10 +7,7 @@ import com.zhwl.home_server.util.SysUserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Api(tags = {"七牛云存储接口"})
@@ -47,6 +44,18 @@ public class QiniuController {
     public ResultVo getFileUrl(String fileKey){
         try {
             return ResultVo.ok(QiNiuUtil.getDownloadUrl(fileKey) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.fail(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "删除一个或多个文件byKey",notes = "删除一个或多个文件byKey")
+    @DeleteMapping("deleteFileByKeys")
+    public ResultVo deleteFileByKeys(String fileKeys){
+        try {
+            QiNiuUtil.deleteUseKeys(fileKeys.split(","));
+            return ResultVo.ok();
         } catch (Exception e) {
             e.printStackTrace();
             return ResultVo.fail(e.getMessage());

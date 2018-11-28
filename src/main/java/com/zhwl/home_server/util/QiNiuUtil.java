@@ -12,6 +12,7 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.zhwl.home_server.bean.ResultVo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -140,7 +141,7 @@ public class QiNiuUtil {
      * 删除多个七牛云上的文件
      * @param keyList
      */
-    public static void deleteUseKeys(String[] keyList) {
+    public static ResultVo deleteUseKeys(String[] keyList) {
         //构造一个带指定Zone对象的配置类
         Configuration cfg = new Configuration(Zone.zone0());
         //...其他参数参考类注释
@@ -156,16 +157,17 @@ public class QiNiuUtil {
             for (int i = 0; i < keyList.length; i++) {
                 BatchStatus status = batchStatusList[i];
                 String key = keyList[i];
-                System.out.print(key + "\t");
+//                System.out.print(key + "\t");
                 if (status.code == 200) {
-                    System.out.println("delete success");
+                    return ResultVo.ok();
                 } else {
-                    System.out.println(status.data.error);
+                    return ResultVo.fail(status.data.error);
                 }
             }
         } catch (QiniuException ex) {
             System.err.println(ex.response.toString());
         }
+        return ResultVo.fail("删除失败");
     }
 
     /**

@@ -21,9 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -88,13 +86,11 @@ public class ShopManageServiceImpl implements ShopManageService {
         shopBasic.setSysUserId(sysUser.getId());
         shopBasic.setContactPhone(userActivate.getPhone());
         if(sysUserService.save(sysUser) == 0 ||shopBasicService.save(shopBasic) == 0) throw new BaseException("系统错误");
-        List<SysUserRole> list = new ArrayList<>();
         SysUserRole sysUserRole = new SysUserRole();
         sysUserRole.setId(UuidUtil.get32UUID());
         sysUserRole.setSysUserId(sysUser.getId());
         sysUserRole.setRoleId("a8f0957951bb4ce09e04d533c70b3659");
-        list.add(sysUserRole);
-        if(sysUserRoleService.saveByList(list) == 0 ) throw new BaseException("角色分配失败");
+        if(sysUserRoleService.save(sysUserRole) == 0 ) throw new BaseException("角色分配失败");
         return true;
     }
 
