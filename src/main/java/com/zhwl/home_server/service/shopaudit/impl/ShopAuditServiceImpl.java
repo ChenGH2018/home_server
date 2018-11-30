@@ -10,6 +10,7 @@ import com.zhwl.home_server.service.shop.ShopCompleteService;
 import com.zhwl.home_server.service.shopaudit.ShopAuditService;
 import com.zhwl.home_server.service.system.RoleService;
 import com.zhwl.home_server.service.system.SysUserRoleService;
+import com.zhwl.home_server.websocket.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,8 @@ public class ShopAuditServiceImpl implements ShopAuditService {
     ShopCompleteService shopCompleteService;
     @Autowired
     SysUserRoleService sysUserRoleService;
+    @Autowired
+    WebSocketUtil webSocketUtil;
 
     @Override
     public Integer save(ShopAudit shopAudit) {
@@ -84,6 +87,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public Integer auditShop(ShopAudit shopAudit) {
+        System.out.println("hello");
         if (Strings.isNullOrEmpty(shopAudit.getShopCompleteId()))
             throw new BaseException("商家ID不能为空");
         if (shopAudit.getAuditStatus() != 1)
@@ -92,6 +96,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
         if (auditCount != 1)
             throw new BaseException("审核失败");
         updateRole(shopAudit);
+        webSocketUtil.sendShopAuditMessage(-1);
         return 1;
     }
 

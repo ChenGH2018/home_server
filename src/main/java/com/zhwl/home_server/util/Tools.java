@@ -1,7 +1,10 @@
 package com.zhwl.home_server.util;
 
 import com.google.common.base.Strings;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,11 +15,15 @@ import java.util.regex.Pattern;
 
 /**
  * 说明：常用工具
- * 创建人：liangzhilin
- * 修改时间：2015年11月24日
  */
 public class Tools {
 
+    /**
+     * 获取当前Request
+     */
+    public static HttpServletRequest getCurrentRequest(){
+        return (HttpServletRequest)(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+    }
     /**
      * 检查手机号是否正确
      */

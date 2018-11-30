@@ -109,7 +109,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     }
 
     @Override
-    public boolean addCustomerService(CustomerService customerService) {
+    public boolean saveCustomerService(CustomerService customerService) {
         ShopBasic currentShopBasic = SysUserUtil.getCurrentShopBasic();
         if (null == currentShopBasic)
             throw new BaseException("拒绝访问：非商家用户");

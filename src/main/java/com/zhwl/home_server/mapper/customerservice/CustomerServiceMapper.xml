@@ -106,7 +106,6 @@
         from
         <include refid="tableName"/> AS cs LEFT JOIN sys_user AS su ON cs.sys_user_id = su.id
         <where>
-            cs.is_delete = 0
             <if test="username != null and username != ''">AND su.username LIKE concat('%',#{username},'%')</if>
             <if test="password != null and password != ''">AND su.password=#{password}</if>
             <if test="fullName != null and fullName != ''">AND su.name LIKE concat('%',#{fullName},'%')</if>

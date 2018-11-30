@@ -16,7 +16,6 @@ import com.zhwl.home_server.system.UserTypeEnum;
 import com.zhwl.home_server.util.SysUserUtil;
 import com.zhwl.home_server.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,20 +48,19 @@ public class SysUserServiceImpl implements SysUserService {
         if (sysUser == null)
             throw new UsernameNotFoundException("用户名错误");
         if (1 == sysUser.getIsFreeze())
-            throw new BadCredentialsException("该用户已冻结");
-        if(sysUser.getUserType() == UserTypeEnum.SHOPUSER.getType()){
+            throw new RuntimeException("该用户已被冻结");
+        if (sysUser.getUserType() == UserTypeEnum.SHOPUSER.getType()) {
             ShopBasic shopBasic = new ShopBasic();
             shopBasic.setSysUserId(sysUser.getId());
             sysUser.setShopBasic(shopBasicService.selectBySelective(shopBasic).get(0));
         }
-        if(sysUser.getUserType() == UserTypeEnum.CS.getType()){
+        if (sysUser.getUserType() == UserTypeEnum.CS.getType()) {
             CustomerService customerService = new CustomerService();
             customerService.setSysUserId(sysUser.getId());
             List<CustomerService> customerServiceList = customerServiceService.selectBySelective(customerService);
-            if(1 == customerServiceList.get(0).getIsDelete())
-                throw new BadCredentialsException("用户已被删除");
+            if(null == customerServiceList || customerServiceList.isEmpty())
+                throw new RuntimeException("该用户已被删除");
         }
-
         return sysUser;
     }
 
@@ -99,7 +97,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUser.setUserface("http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg");
         sysUser.setAddTime(new Date());
         //如果没有usertype则默认是系统用户（真正操作还会校验权限，所以没事）
-        if(null == sysUser.getUserType()) sysUser.setUserType(UserTypeEnum.SYSTEMUSER.getType());
+        if (null == sysUser.getUserType()) sysUser.setUserType(UserTypeEnum.SYSTEMUSER.getType());
         sysUser.setIsFreeze(0);
         sysUser.setIsLogout(0);
         sysUser.setIsActivateEamil(0);
@@ -145,7 +143,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public boolean checkEmailExist(String email) {
-        return sysUserMapper.checkEmailExist(email)>0;
+        return sysUserMapper.checkEmailExist(email) > 0;
     }
 
     //检查用户名

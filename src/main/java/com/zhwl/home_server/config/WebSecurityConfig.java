@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     } else if (e instanceof DisabledException) {
                         sb.append("账户被禁用，登录失败，请联系管理员!");
                     } else {
-                        sb.append("登录失败!");
+                        sb.append(e.getMessage());
                     }
                     sb.append("\"}");
                     out.write(sb.toString());

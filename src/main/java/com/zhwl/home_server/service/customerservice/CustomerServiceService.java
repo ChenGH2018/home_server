@@ -72,7 +72,7 @@ public interface CustomerServiceService {
      */
     Integer physicsDeleteArray(String[] ids) throws BaseException;
 
-    boolean addCustomerService(CustomerService customerService);
+    boolean saveCustomerService(CustomerService customerService);
 
 
     Integer softDeleteArray(String[] ids) throws BaseException;

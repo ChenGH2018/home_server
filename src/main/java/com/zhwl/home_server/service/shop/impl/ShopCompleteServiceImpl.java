@@ -9,6 +9,7 @@ import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
 import com.zhwl.home_server.service.shopaudit.ShopAuditService;
 import com.zhwl.home_server.util.UuidUtil;
+import com.zhwl.home_server.websocket.WebSocketUtil;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
     ShopCompleteMapper shopCompleteMapper;
     @Autowired
     ShopAuditService shopAuditService;
+    @Autowired
+    WebSocketUtil webScoketUtil;
 
     @Override
     public Integer save(ShopComplete shopComplete) {
@@ -42,11 +45,12 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
         Integer completeSave = shopCompleteMapper.save(shopComplete);
         Integer shopAuditSave = shopAuditService.save(shopAudit);
         if (completeSave != 1 || shopAuditSave != 1) throw new BaseException("提交失败");
+        webScoketUtil.sendShopAuditMessage(1);
         return 1;
     }
 
     private void shopAuditNoNull(@NonNull ShopAudit shopAudit) {
-        if (Strings.isNullOrEmpty(shopAudit.getApplicationPerson())) throw new BaseException("审核申请人不能为空");
+        if (Strings.isNullOrEmpty(shopAudit.getApplicationPerson())) throw new BaseException("申请人不能为空");
     }
 
     private void shopCompleteNoNull(@NonNull ShopComplete shopComplete) {

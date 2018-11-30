@@ -112,7 +112,7 @@ public class CustomerServiceController {
     @PostMapping("save")
     public ResultVo save(@RequestBody CustomerService customerService) {
         try {
-            return ResultVo.ok(customerServiceService.addCustomerService(customerService));
+            return ResultVo.ok(customerServiceService.saveCustomerService(customerService));
         } catch (BaseException e) {
             e.printStackTrace();
             return ResultVo.fail(e.getCode(), e.getMessage());
