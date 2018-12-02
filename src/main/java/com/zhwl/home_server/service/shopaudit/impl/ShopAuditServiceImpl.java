@@ -87,7 +87,6 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public Integer auditShop(ShopAudit shopAudit) {
-        System.out.println("hello");
         if (Strings.isNullOrEmpty(shopAudit.getShopCompleteId()))
             throw new BaseException("商家ID不能为空");
         if (shopAudit.getAuditStatus() != 1)

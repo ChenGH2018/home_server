@@ -12,6 +12,9 @@
         <!-- 别名自动扫描 -->
         <package name="com.zhwl.home_server.bean"/>
     </typeAliases>
+    <typeHandlers>
+        <typeHandler handler="com.zhwl.home_server.config.StringArrTypeHandler"/>
+    </typeHandlers>
 
     <plugins>
         <plugin interceptor="com.zhwl.home_server.bean.PagePlugin">

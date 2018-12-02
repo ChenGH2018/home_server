@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.categoryspecification.CategorySpecificationMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_category_specification
+    </sql>
+
+    <sql id="field">
+        category_name,
+        category_values,
+        is_customize,
+        is_require,
+        goods_category_id,
+        add_time,
+        add_user,
+        update_time,
+        update_user,
+        id
+    </sql>
+    <sql id="aliasField">
+        cs.category_name AS  cs_category_name,
+        cs.category_values AS  cs_category_values,
+        cs.is_customize AS  cs_is_customize,
+        cs.is_require AS  cs_is_require,
+        cs.goods_category_id AS  cs_goods_category_id,
+        cs.add_time AS  cs_add_time,
+        cs.add_user AS  cs_add_user,
+        cs.update_time AS  cs_update_time,
+        cs.update_user AS  cs_update_user,
+        cs.id AS  cs_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="CategorySpecification">
+        <id column="cs_id" property="id"/>
+        <result column="cs_category_name" property="categoryName"/>
+        <result column="cs_category_values" property="categoryValues"/>
+        <result column="cs_is_customize" property="isCustomize"/>
+        <result column="cs_is_require" property="isRequire"/>
+        <result column="cs_goods_category_id" property="goodsCategoryId"/>
+        <result column="cs_add_time" property="addTime"/>
+        <result column="cs_add_user" property="addUser"/>
+        <result column="cs_update_time" property="updateTime"/>
+        <result column="cs_update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="CategorySpecification">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{categoryName},
+        #{categoryValues},
+        #{isCustomize},
+        #{isRequire},
+        #{goodsCategoryId},
+        #{addTime},
+        #{addUser},
+        #{updateTime},
+        #{updateUser},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="CategorySpecification">
+        update
+        <include refid="tableName"/>
+        <set>
+        <if test="categoryName != null ">category_name=#{categoryName},</if>
+        <if test="categoryValues != null ">category_values=#{categoryValues},</if>
+        <if test="isCustomize != null ">is_customize=#{isCustomize},</if>
+        <if test="isRequire != null ">is_require=#{isRequire},</if>
+        <if test="goodsCategoryId != null ">goods_category_id=#{goodsCategoryId},</if>
+        <if test="addTime != null ">add_time=#{addTime},</if>
+        <if test="addUser != null ">add_user=#{addUser},</if>
+        <if test="updateTime != null ">update_time=#{updateTime},</if>
+        <if test="updateUser != null ">update_user=#{updateUser},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="CategorySpecification" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS cs
+        <where>
+         <if test="categoryName != null and categoryName != ''">AND cs.category_name=#{categoryName}</if>
+         <if test="categoryValues != null and categoryValues != ''">AND cs.category_values=#{categoryValues}</if>
+         <if test="isCustomize != null ">AND cs.is_customize=#{isCustomize}</if>
+         <if test="isRequire != null ">AND cs.is_require=#{isRequire}</if>
+         <if test="goodsCategoryId != null and goodsCategoryId != ''">AND cs.goods_category_id=#{goodsCategoryId}</if>
+         <if test="addTime != null ">AND cs.add_time=#{addTime}</if>
+         <if test="addUser != null and addUser != ''">AND cs.add_user=#{addUser}</if>
+         <if test="updateTime != null ">AND cs.update_time=#{updateTime}</if>
+         <if test="updateUser != null and updateUser != ''">AND cs.update_user=#{updateUser}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getCategorySpecificationByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS cs
+        <where>
+        <if test="pd.entity.categoryName != null and pd.entity.categoryName != ''">AND cs.category_name=#{pd.entity.categoryName}</if>
+        <if test="pd.entity.categoryValues != null and pd.entity.categoryValues != ''">AND cs.category_values=#{pd.entity.categoryValues}</if>
+        <if test="pd.entity.isCustomize != null ">AND cs.is_customize=#{pd.entity.isCustomize}</if>
+        <if test="pd.entity.isRequire != null ">AND cs.is_require=#{pd.entity.isRequire}</if>
+        <if test="pd.entity.goodsCategoryId != null and pd.entity.goodsCategoryId != ''">AND cs.goods_category_id=#{pd.entity.goodsCategoryId}</if>
+        <if test="pd.entity.addTime != null ">AND cs.add_time=#{pd.entity.addTime}</if>
+        <if test="pd.entity.addUser != null and pd.entity.addUser != ''">AND cs.add_user=#{pd.entity.addUser}</if>
+        <if test="pd.entity.updateTime != null ">AND cs.update_time=#{pd.entity.updateTime}</if>
+        <if test="pd.entity.updateUser != null and pd.entity.updateUser != ''">AND cs.update_user=#{pd.entity.updateUser}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="CategorySpecification">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.categoryName},
+            #{t.categoryValues},
+            #{t.isCustomize},
+            #{t.isRequire},
+            #{t.goodsCategoryId},
+            #{t.addTime},
+            #{t.addUser},
+            #{t.updateTime},
+            #{t.updateUser},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+</mapper>

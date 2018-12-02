@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.goodscategory.GoodsCategoryMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_goods_category
+    </sql>
+
+    <sql id="field">
+        category_name,
+        category_description,
+        is_delete,
+        add_time,
+        add_user,
+        update_time,
+        update_user,
+        id
+    </sql>
+    <sql id="aliasField">
+        gc.category_name AS  gc_category_name,
+        gc.category_description AS  gc_category_description,
+        gc.is_delete AS  gc_is_delete,
+        gc.add_time AS  gc_add_time,
+        gc.add_user AS  gc_add_user,
+        gc.update_time AS  gc_update_time,
+        gc.update_user AS  gc_update_user,
+        gc.id AS  gc_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="GoodsCategory">
+        <id column="gc_id" property="id"/>
+        <result column="gc_category_name" property="categoryName"/>
+        <result column="gc_category_description" property="categoryDescription"/>
+        <result column="gc_is_delete" property="isDelete"/>
+        <result column="gc_add_time" property="addTime"/>
+        <result column="gc_add_user" property="addUser"/>
+        <result column="gc_update_time" property="updateTime"/>
+        <result column="gc_update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="GoodsCategory">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{categoryName},
+        #{categoryDescription},
+        #{isDelete},
+        #{addTime},
+        #{addUser},
+        #{updateTime},
+        #{updateUser},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="GoodsCategory">
+        update
+        <include refid="tableName"/>
+        <set>
+        <if test="categoryName != null ">category_name=#{categoryName},</if>
+        <if test="categoryDescription != null ">category_description=#{categoryDescription},</if>
+        <if test="isDelete != null ">is_delete=#{isDelete},</if>
+        <if test="addTime != null ">add_time=#{addTime},</if>
+        <if test="addUser != null ">add_user=#{addUser},</if>
+        <if test="updateTime != null ">update_time=#{updateTime},</if>
+        <if test="updateUser != null ">update_user=#{updateUser},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="GoodsCategory" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS gc
+        <where>
+         <if test="categoryName != null and categoryName != ''">AND gc.category_name=#{categoryName}</if>
+         <if test="categoryDescription != null and categoryDescription != ''">AND gc.category_description=#{categoryDescription}</if>
+         <if test="isDelete != null ">AND gc.is_delete=#{isDelete}</if>
+         <if test="addTime != null ">AND gc.add_time=#{addTime}</if>
+         <if test="addUser != null and addUser != ''">AND gc.add_user=#{addUser}</if>
+         <if test="updateTime != null ">AND gc.update_time=#{updateTime}</if>
+         <if test="updateUser != null and updateUser != ''">AND gc.update_user=#{updateUser}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getGoodsCategoryByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS gc
+        <where>
+        <if test="pd.entity.categoryName != null and pd.entity.categoryName != ''">AND gc.category_name=#{pd.entity.categoryName}</if>
+        <if test="pd.entity.categoryDescription != null and pd.entity.categoryDescription != ''">AND gc.category_description=#{pd.entity.categoryDescription}</if>
+        <if test="pd.entity.isDelete != null ">AND gc.is_delete=#{pd.entity.isDelete}</if>
+        <if test="pd.entity.addTime != null ">AND gc.add_time=#{pd.entity.addTime}</if>
+        <if test="pd.entity.addUser != null and pd.entity.addUser != ''">AND gc.add_user=#{pd.entity.addUser}</if>
+        <if test="pd.entity.updateTime != null ">AND gc.update_time=#{pd.entity.updateTime}</if>
+        <if test="pd.entity.updateUser != null and pd.entity.updateUser != ''">AND gc.update_user=#{pd.entity.updateUser}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="GoodsCategory">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.categoryName},
+            #{t.categoryDescription},
+            #{t.isDelete},
+            #{t.addTime},
+            #{t.addUser},
+            #{t.updateTime},
+            #{t.updateUser},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+    <!--批量软删除操作-->
+    <update id="softDeleteArray" parameterType="String">
+        update <include refid="tableName"/>
+        set
+        is_delete = 1
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </update>
+</mapper>
