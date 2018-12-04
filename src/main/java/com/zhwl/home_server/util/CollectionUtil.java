@@ -18,4 +18,8 @@ public class CollectionUtil {
         Arrays.stream(array).forEach(Element->arrayList.add(Element));
         return arrayList;
     }
+    public static String[] listToArray(List<String> list){
+        String[] strings = new String[list.size()];
+        return list.toArray(strings);
+    }
 }

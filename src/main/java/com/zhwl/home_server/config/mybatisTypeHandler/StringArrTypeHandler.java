@@ -1,4 +1,4 @@
-package com.zhwl.home_server.config;
+package com.zhwl.home_server.config.mybatisTypeHandler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

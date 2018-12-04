@@ -2,6 +2,7 @@ package com.zhwl.home_server.mapper.shopcomplete;
 
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shop.ShopComplete;
+import com.zhwl.home_server.bean.system.SysUser;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface ShopCompleteMapper {
 
     List<ShopComplete> getShopCompleteByPage(Page pg);
 
-
+    SysUser selectUserByCompleteId(String shopCompleteId);
 }

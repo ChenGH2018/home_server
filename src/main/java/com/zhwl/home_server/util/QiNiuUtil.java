@@ -13,6 +13,7 @@ import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import com.zhwl.home_server.bean.ResultVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.net.URLEncoder;
  * 七牛服务端使用
  */
 @Component
+@Slf4j
 public class QiNiuUtil {
     private static String QI_NIU_ACCESS_KEY;
     private static String QI_NIU_SECRET_KEY;
@@ -48,6 +50,22 @@ public class QiNiuUtil {
     @Value("${QI_NIU_DOWNLOAD_URL}")
     public void setQiNiuDownloadUrl(String qiNiuDownloadUrl) {
         QI_NIU_DOWNLOAD_URL = qiNiuDownloadUrl;
+    }
+
+
+    public static String[] keysToUrls(String[]  imgKeys){
+        String[] urls = new String[imgKeys.length];
+        if (null != imgKeys && imgKeys.length > 0){
+            for(int i = 0; i<imgKeys.length;i++){
+                try {
+                    urls[i] = QiNiuUtil.getDownloadUrl(imgKeys[i]);
+                } catch (UnsupportedEncodingException e) {
+                    log.error("解析key异常 key:"+imgKeys[i] + "错误信息:UnsupportedEncodingException");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return urls;
     }
 
     /**

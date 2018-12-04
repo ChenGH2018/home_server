@@ -111,7 +111,7 @@ public class GoodsCategoryController {
     @DeleteMapping("softDeleteByIds/{ids}")
     public ResultVo softDeleteByIds(@PathVariable String ids) {
         try {
-            return ResultVo.ok(goodsCategoryService.softDeleteArray(ids.split(",")));
+            return goodsCategoryService.softDeleteArray(ids.split(","));
         } catch (BaseException e) {
             e.printStackTrace();
             return ResultVo.fail(e.getCode(),e.getMessage());

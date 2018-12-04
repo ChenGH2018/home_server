@@ -38,6 +38,6 @@ public class SysUserUtil {
         return currentUser.getShopBasic();
     }
     public static String getCurrentShopBasicId() {
-        return getCurrentShopBasic().getId();
+        return null == getCurrentShopBasic()? null:getCurrentShopBasic().getId();
     }
 }

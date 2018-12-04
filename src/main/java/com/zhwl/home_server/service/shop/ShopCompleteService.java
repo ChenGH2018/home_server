@@ -2,6 +2,7 @@ package com.zhwl.home_server.service.shop;
 
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shop.ShopComplete;
+import com.zhwl.home_server.bean.system.SysUser;
 
 import java.util.List;
 /** 
@@ -60,5 +61,7 @@ ShopComplete selectById(String shopCompleteId);
 
 
     ShopComplete getShopCompleteAndAudit(String shopBasicId);
+
+    SysUser selectUserByCompleteId(String shopCompleteId);
 }
 

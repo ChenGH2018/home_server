@@ -1,6 +1,7 @@
 package com.zhwl.home_server.service.goodscategory;
 
 import com.zhwl.home_server.bean.Page;
+import com.zhwl.home_server.bean.ResultVo;
 import com.zhwl.home_server.bean.goodscategory.GoodsCategory;
 import com.zhwl.home_server.exception.BaseException;
 
@@ -69,6 +70,6 @@ public interface GoodsCategoryService {
         * @param ids
         * @throws BaseException
         */
-        Integer softDeleteArray(String[] ids) throws BaseException;
+        ResultVo softDeleteArray(String[] ids) throws BaseException;
 }
 

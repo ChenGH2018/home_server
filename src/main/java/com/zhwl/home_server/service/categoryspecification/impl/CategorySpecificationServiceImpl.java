@@ -29,7 +29,23 @@ public class CategorySpecificationServiceImpl implements CategorySpecificationSe
 
     @Override
     public Integer save(CategorySpecification categorySpecification) throws BaseException {
+        validateCategorySpecification(categorySpecification);
         return categorySpecificationMapper.save(categorySpecification);
+    }
+
+    private void validateCategorySpecification(CategorySpecification categorySpecification) {
+        if(Strings.isNullOrEmpty(categorySpecification.getCategoryName()))
+            throw new BaseException("类别规格名字不能为空");
+        if(null == categorySpecification.getCategoryValues() || categorySpecification.getCategoryValues().length == 0)
+            throw new BaseException("类别规格值不能为空");
+        if(Strings.isNullOrEmpty(categorySpecification.getGoodsCategoryId()))
+            throw new BaseException("所属商品规格ID不能为空");
+        if(null == categorySpecification.getIsCustomize())
+            throw new BaseException("是否可自定义不能为空");
+        if(null == categorySpecification.getIsRequire())
+            throw new BaseException("是否必填不能为空");
+
+
     }
 
     @Override

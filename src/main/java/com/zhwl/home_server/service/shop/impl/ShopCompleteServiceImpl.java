@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
 import com.zhwl.home_server.bean.shop.ShopComplete;
 import com.zhwl.home_server.bean.shopaudit.ShopAudit;
+import com.zhwl.home_server.bean.system.SysUser;
 import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
@@ -127,6 +128,11 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
         if (shopCompletes.isEmpty()) return null;
         if (shopCompletes.size() > 1) throw new BaseException("数据异常");
         return shopCompletes.get(0);
+    }
+
+    @Override
+    public SysUser selectUserByCompleteId(String shopCompleteId) {
+        return shopCompleteMapper.selectUserByCompleteId(shopCompleteId);
     }
 
 }

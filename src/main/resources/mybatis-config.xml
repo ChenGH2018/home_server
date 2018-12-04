@@ -13,7 +13,8 @@
         <package name="com.zhwl.home_server.bean"/>
     </typeAliases>
     <typeHandlers>
-        <typeHandler handler="com.zhwl.home_server.config.StringArrTypeHandler"/>
+        <typeHandler handler="com.zhwl.home_server.config.mybatisTypeHandler.StringArrTypeHandler"/>
+        <typeHandler handler="com.zhwl.home_server.config.mybatisTypeHandler.GoodsSpecTypeHandler"/>
     </typeHandlers>
 
     <plugins>

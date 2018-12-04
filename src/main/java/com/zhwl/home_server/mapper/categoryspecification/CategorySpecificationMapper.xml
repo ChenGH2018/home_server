@@ -91,7 +91,7 @@
         <include refid="aliasField"/>
         from <include refid="tableName"/> AS cs
         <where>
-         <if test="categoryName != null and categoryName != ''">AND cs.category_name=#{categoryName}</if>
+         <if test="categoryName != null and categoryName != ''">AND cs.category_name LIKE concat('%',#{categoryName},'%')</if>
          <if test="categoryValues != null and categoryValues != ''">AND cs.category_values=#{categoryValues}</if>
          <if test="isCustomize != null ">AND cs.is_customize=#{isCustomize}</if>
          <if test="isRequire != null ">AND cs.is_require=#{isRequire}</if>
@@ -109,7 +109,7 @@
         <include refid="aliasField"/>
         from <include refid="tableName"/> AS cs
         <where>
-        <if test="pd.entity.categoryName != null and pd.entity.categoryName != ''">AND cs.category_name=#{pd.entity.categoryName}</if>
+        <if test="pd.entity.categoryName != null and pd.entity.categoryName != ''">AND cs.category_name LIKE concat('%',#{pd.entity.categoryName},'%')</if>
         <if test="pd.entity.categoryValues != null and pd.entity.categoryValues != ''">AND cs.category_values=#{pd.entity.categoryValues}</if>
         <if test="pd.entity.isCustomize != null ">AND cs.is_customize=#{pd.entity.isCustomize}</if>
         <if test="pd.entity.isRequire != null ">AND cs.is_require=#{pd.entity.isRequire}</if>

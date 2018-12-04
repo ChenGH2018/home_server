@@ -25,4 +25,6 @@ public interface GoodsCategoryMapper {
     Integer physicsDeleteArray(String[] ids);
 
     Integer softDeleteArray(String[] ids);
+
+    List<GoodsCategory> selectByIds(String[] ids);
 }

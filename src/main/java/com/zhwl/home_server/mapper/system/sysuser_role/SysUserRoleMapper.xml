@@ -64,6 +64,6 @@
         SET
         sur.role_id = #{roleId}
         WHERE
-        sb.id = #{shopId}
+        sb.id = #{shopBasicId}
      </update>
 </mapper>

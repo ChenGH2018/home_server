@@ -21,7 +21,7 @@ public class WebSocketUtil {
     //发送管理员订阅消息
     public Boolean sendAdminTopicMessage(ComponentMessage message) {
         if(initComponentMessage(message)){
-            messagingTemplate.convertAndSend("/topic/admin", messageMaps.get(message.getComponentUrl()));
+            messagingTemplate.convertAndSend("/topic/shopAudit", messageMaps.get(message.getComponentUrl()));
             return true;
         }
         return false;

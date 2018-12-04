@@ -2,6 +2,7 @@ package com.zhwl.home_server.service.shopaudit.impl;
 
 import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.Page;
+import com.zhwl.home_server.bean.shop.ShopComplete;
 import com.zhwl.home_server.bean.shopaudit.ShopAudit;
 import com.zhwl.home_server.bean.system.Role;
 import com.zhwl.home_server.exception.BaseException;
@@ -87,6 +88,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
 
     @Override
     public Integer auditShop(ShopAudit shopAudit) {
+        System.out.println("hello");
         if (Strings.isNullOrEmpty(shopAudit.getShopCompleteId()))
             throw new BaseException("商家ID不能为空");
         if (shopAudit.getAuditStatus() != 1)
@@ -104,15 +106,17 @@ public class ShopAuditServiceImpl implements ShopAuditService {
         return shopAuditMapper.updateAuditStatus(shopAudit);
     }
 
-    //审核后初始化操作：修改该商家的角色为已审核商家
+    //审核后初始化操作：修改该商家的角色为已审核商家  e.g.在sql语句中根据商家basicId获取sysUserId，并修改sysUserId的角色ID为审核商家角色ID
     private Integer updateRole(ShopAudit shopAudit) {
         if (shopAudit.getAuditResult() == 1) {//审核通过才初始化
             Role role = new Role();
             role.setName("ROLE_activate_shop");
             List<Role> roles = roleService.selectBySelective(role);
             if (roles.size() != 1) throw new BaseException("角色数量异常");
+            ShopComplete shopComplete = shopCompleteService.selectById(shopAudit.getShopCompleteId());
+            if(null == shopComplete) throw new BaseException("商家信息查询失败");
             HashMap<String, Object> map = new HashMap<>();
-            map.put("shopId", shopAudit.getId());
+            map.put("shopBasicId", shopComplete.getShopBasicId());
             map.put("roleId", roles.get(0).getId());
             return sysUserRoleService.updateRole(map);
         }

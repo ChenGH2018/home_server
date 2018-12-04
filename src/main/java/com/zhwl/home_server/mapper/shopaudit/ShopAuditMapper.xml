@@ -139,7 +139,7 @@
     <!--批量删除操作-->
     <delete id="deleteArray" parameterType="String">
         delete <include refid="tableName"/> ,t_shop_complete from
-        <include refid="tableName"/> LEFT JOIN t_shop_complete ON <include refid="tableName"/>.shop_complete_id = t_shop_complete.id
+        <include refid="tableName"/> LEFT JOIN t_shop_complete ON <include refid="tab   leName"/>.shop_complete_id = t_shop_complete.id
         where
         <include refid="tableName"/>.id in
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
@@ -166,4 +166,6 @@
        /*   AND audit_status = 1
           AND audit_result = 2*/
     </update>
+
+
 </mapper>

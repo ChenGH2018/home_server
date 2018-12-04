@@ -81,9 +81,9 @@
         <include refid="aliasField"/>
         from <include refid="tableName"/> AS gc
         <where>
+            gc.is_delete = 0
          <if test="categoryName != null and categoryName != ''">AND gc.category_name=#{categoryName}</if>
          <if test="categoryDescription != null and categoryDescription != ''">AND gc.category_description=#{categoryDescription}</if>
-         <if test="isDelete != null ">AND gc.is_delete=#{isDelete}</if>
          <if test="addTime != null ">AND gc.add_time=#{addTime}</if>
          <if test="addUser != null and addUser != ''">AND gc.add_user=#{addUser}</if>
          <if test="updateTime != null ">AND gc.update_time=#{updateTime}</if>
@@ -97,6 +97,7 @@
         <include refid="aliasField"/>
         from <include refid="tableName"/> AS gc
         <where>
+            gc.is_delete = 0
         <if test="pd.entity.categoryName != null and pd.entity.categoryName != ''">AND gc.category_name=#{pd.entity.categoryName}</if>
         <if test="pd.entity.categoryDescription != null and pd.entity.categoryDescription != ''">AND gc.category_description=#{pd.entity.categoryDescription}</if>
         <if test="pd.entity.isDelete != null ">AND gc.is_delete=#{pd.entity.isDelete}</if>
@@ -148,4 +149,14 @@
         #{item}
         </foreach>
     </update>
+
+    <select id="selectByIds" parameterType="string" resultType="GoodsCategory">
+        SELECT <include refid="field"/>
+        FROM <include refid="tableName"/>
+        WHERE
+        id IN
+        <foreach item="item" index="index"  collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

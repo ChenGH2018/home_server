@@ -199,4 +199,12 @@
         </foreach>
     </delete>
     <!--查询该商家是否已经有完善信息-->
+
+    <!--获取商家userID，ByshopCompleteId-->
+    <select id="selectUserByCompleteId" resultType="SysUser">
+      SELECT su.name, su.phone, su.telephone, su.address, su.username, su.password, su.userface, su.remark, su.add_time, su.user_type, su.is_freeze, su.id
+      FROM <include refid="tableName"/> AS sc LEFT JOIN t_shop_basic AS sb ON sc.shop_basic_id = sb.id LEFT JOIN t_sys_user AS su ON sb.sys_user_id = su.id
+      WHERE sc.id = #{shopCompleteId}
+        AND su.is_freeze = 0
+    </select>
 </mapper>
