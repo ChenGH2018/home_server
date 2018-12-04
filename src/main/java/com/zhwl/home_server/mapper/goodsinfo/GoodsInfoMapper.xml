@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhwl.home_server.mapper.goodsinfo.GoodsInfoMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        t_goods_info
+    </sql>
+
+    <sql id="field">
+        goods_code,
+        goods_name,
+        goods_explain,
+        img_keys,
+        goods_spec,
+        is_added,
+        is_delete,
+        shop_basic_id,
+        goods_category_id,
+        add_time,
+        add_user,
+        update_time,
+        update_user,
+        id
+    </sql>
+    <sql id="aliasField">
+        gi.goods_code AS  gi_goods_code,
+        gi.goods_name AS  gi_goods_name,
+        gi.goods_explain AS  gi_goods_explain,
+        gi.img_keys AS  gi_img_keys,
+        gi.goods_spec AS  gi_goods_spec,
+        gi.is_added AS  gi_is_added,
+        gi.is_delete AS  gi_is_delete,
+        gi.shop_basic_id AS  gi_shop_basic_id,
+        gi.goods_category_id AS  gi_goods_category_id,
+        gi.add_time AS  gi_add_time,
+        gi.add_user AS  gi_add_user,
+        gi.update_time AS  gi_update_time,
+        gi.update_user AS  gi_update_user,
+        gi.id AS  gi_id
+        </sql>
+
+    <resultMap id="baseResultMap" type="GoodsInfo">
+        <id column="gi_id" property="id"/>
+        <result column="gi_goods_code" property="goodsCode"/>
+        <result column="gi_goods_name" property="goodsName"/>
+        <result column="gi_goods_explain" property="goodsExplain"/>
+        <result column="gi_img_keys" property="imgKeys"/>
+        <result column="gi_goods_spec" property="goodsSpec"/>
+        <result column="gi_is_added" property="isAdded"/>
+        <result column="gi_is_delete" property="isDelete"/>
+        <result column="gi_shop_basic_id" property="shopBasicId"/>
+        <result column="gi_goods_category_id" property="goodsCategoryId"/>
+        <result column="gi_add_time" property="addTime"/>
+        <result column="gi_add_user" property="addUser"/>
+        <result column="gi_update_time" property="updateTime"/>
+        <result column="gi_update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="GoodsInfo">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        (
+        #{goodsCode},
+        #{goodsName},
+        #{goodsExplain},
+        #{imgKeys},
+        #{goodsSpec},
+        #{isAdded},
+        #{isDelete},
+        #{shopBasicId},
+        #{goodsCategoryId},
+        #{addTime},
+        #{addUser},
+        #{updateTime},
+        #{updateUser},
+        #{id}
+        )
+    </insert>
+
+    <!--修改-->
+    <update id="updateBySelective" parameterType="GoodsInfo">
+        update
+        <include refid="tableName"/>
+        <set>
+        <if test="goodsName != null ">goods_name=#{goodsName},</if>
+        <if test="goodsExplain != null ">goods_explain=#{goodsExplain},</if>
+        <if test="imgKeys != null ">img_keys=#{imgKeys},</if>
+        <if test="goodsSpec != null ">goods_spec=#{goodsSpec},</if>
+        <if test="isAdded != null ">is_added=#{isAdded},</if>
+        <if test="isDelete != null ">is_delete=#{isDelete},</if>
+        <if test="goodsCategoryId != null ">goods_category_id=#{goodsCategoryId},</if>
+        <if test="addTime != null ">add_time=#{addTime},</if>
+        <if test="addUser != null ">add_user=#{addUser},</if>
+        <if test="updateTime != null ">update_time=#{updateTime},</if>
+        <if test="updateUser != null ">update_user=#{updateUser},</if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    <!--条件查询所有-->
+    <select id="selectBySelective" parameterType="GoodsInfo" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS gi
+        <where>
+            gi.is_delete = 0
+         <if test="goodsCode != null ">AND gi.goods_code=#{goodsCode}</if>
+         <if test="goodsName != null and goodsName != ''">AND gi.goods_name=#{goodsName}</if>
+         <if test="goodsExplain != null and goodsExplain != ''">AND gi.goods_explain=#{goodsExplain}</if>
+         <if test="imgKeys != null and imgKeys != ''">AND gi.img_keys=#{imgKeys}</if>
+         <if test="goodsSpec != null and goodsSpec != ''">AND gi.goods_spec=#{goodsSpec}</if>
+         <if test="isAdded != null ">AND gi.is_added=#{isAdded}</if>
+         <if test="isDelete != null ">AND gi.is_delete=#{isDelete}</if>
+         <if test="shopBasicId != null and shopBasicId != ''">AND gi.shop_basic_id=#{shopBasicId}</if>
+         <if test="goodsCategoryId != null and goodsCategoryId != ''">AND gi.goods_category_id=#{goodsCategoryId}</if>
+         <if test="addTime != null ">AND gi.add_time=#{addTime}</if>
+         <if test="addUser != null and addUser != ''">AND gi.add_user=#{addUser}</if>
+         <if test="updateTime != null ">AND gi.update_time=#{updateTime}</if>
+         <if test="updateUser != null ">AND gi.update_user=#{updateUser}</if>
+        </where>
+    </select>
+
+    <!--条件查询分页-->
+    <select id="getGoodsInfoByPage" parameterType="Page" resultMap="baseResultMap">
+        select
+        <include refid="aliasField"/>
+        from <include refid="tableName"/> AS gi
+        <where>
+            gi.is_delete = 0
+            <if test="pd.entity.goodsCode != null ">AND gi.goods_code=#{pd.entity.goodsCode}</if>
+        <if test="pd.entity.goodsName != null and pd.entity.goodsName != ''">AND gi.goods_name=#{pd.entity.goodsName}</if>
+        <if test="pd.entity.goodsExplain != null and pd.entity.goodsExplain != ''">AND gi.goods_explain=#{pd.entity.goodsExplain}</if>
+        <if test="pd.entity.imgKeys != null and pd.entity.imgKeys != ''">AND gi.img_keys=#{pd.entity.imgKeys}</if>
+        <if test="pd.entity.goodsSpec != null and pd.entity.goodsSpec != ''">AND gi.goods_spec=#{pd.entity.goodsSpec}</if>
+        <if test="pd.entity.isAdded != null ">AND gi.is_added=#{pd.entity.isAdded}</if>
+        <if test="pd.entity.isDelete != null ">AND gi.is_delete=#{pd.entity.isDelete}</if>
+        <if test="pd.entity.shopBasicId != null and pd.entity.shopBasicId != ''">AND gi.shop_basic_id=#{pd.entity.shopBasicId}</if>
+        <if test="pd.entity.goodsCategoryId != null and pd.entity.goodsCategoryId != ''">AND gi.goods_category_id=#{pd.entity.goodsCategoryId}</if>
+        <if test="pd.entity.addTime != null ">AND gi.add_time=#{pd.entity.addTime}</if>
+        <if test="pd.entity.addUser != null and pd.entity.addUser != ''">AND gi.add_user=#{pd.entity.addUser}</if>
+        <if test="pd.entity.updateTime != null ">AND gi.update_time=#{pd.entity.updateTime}</if>
+        <if test="pd.entity.updateUser != null ">AND gi.update_user=#{pd.entity.updateUser}</if>
+        </where>
+    </select>
+
+    <!--批量插入操作-->
+    <insert id="saveByList" parameterType="GoodsInfo">
+        INSERT INTO
+        <include refid="tableName"/>
+        (<include refid="field"/>)
+        VALUES
+        <foreach item="t" index="index" collection="list" separator=",">
+            (
+            #{t.goodsCode},
+            #{t.goodsName},
+            #{t.goodsExplain},
+            #{t.imgKeys},
+            #{t.goodsSpec},
+            #{t.isAdded},
+            #{t.isDelete},
+            #{t.shopBasicId},
+            #{t.goodsCategoryId},
+            #{t.addTime},
+            #{t.addUser},
+            #{t.updateTime},
+            #{t.updateUser},
+            #{t.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量物理删除操作-->
+    <delete id="physicsDeleteArray" parameterType="String">
+        delete from
+        <include refid="tableName"/>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </delete>
+    <!--批量软删除操作-->
+    <update id="softDeleteArray" parameterType="String">
+        update <include refid="tableName"/>
+        set
+        is_delete = 1
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </update>
+</mapper>
