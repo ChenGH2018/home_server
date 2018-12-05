@@ -115,6 +115,7 @@ public class ShopAuditServiceImpl implements ShopAuditService {
             if (roles.size() != 1) throw new BaseException("角色数量异常");
             ShopComplete shopComplete = shopCompleteService.selectById(shopAudit.getShopCompleteId());
             if(null == shopComplete) throw new BaseException("商家信息查询失败");
+            shopAudit.setShopComplete(shopComplete);
             HashMap<String, Object> map = new HashMap<>();
             map.put("shopBasicId", shopComplete.getShopBasicId());
             map.put("roleId", roles.get(0).getId());

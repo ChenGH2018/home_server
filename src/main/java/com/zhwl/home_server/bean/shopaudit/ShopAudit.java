@@ -1,12 +1,12 @@
 package com.zhwl.home_server.bean.shopaudit;
 
 import com.zhwl.home_server.bean.shop.ShopBasic;
+import com.zhwl.home_server.bean.shop.ShopComplete;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -25,9 +25,12 @@ public class ShopAudit {
     private Date auditTime;//审核时间
     private Integer auditResult;//审核结果  1：已通过、2：未通过
 
-    @Transient
     private Boolean isQueryShop;//是否查询关联商家
+    private Boolean isQueryShopBasic;   //是否查询商家基本信息
+    private Boolean isQueryShopComplete;    //是否查询商家完善信息
 
     @ApiModelProperty(hidden = true)
     private ShopBasic shopBasic;//商家基本信息，包含商家完善信息
+    @ApiModelProperty(hidden = true)
+    private ShopComplete shopComplete;//商家，包含商家完善信息
 }

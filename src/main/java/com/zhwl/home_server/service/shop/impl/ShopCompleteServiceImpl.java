@@ -9,6 +9,7 @@ import com.zhwl.home_server.exception.BaseException;
 import com.zhwl.home_server.mapper.shopcomplete.ShopCompleteMapper;
 import com.zhwl.home_server.service.shop.ShopCompleteService;
 import com.zhwl.home_server.service.shopaudit.ShopAuditService;
+import com.zhwl.home_server.util.SysUserUtil;
 import com.zhwl.home_server.util.UuidUtil;
 import com.zhwl.home_server.websocket.WebSocketUtil;
 import lombok.NonNull;
@@ -36,7 +37,10 @@ public class ShopCompleteServiceImpl implements ShopCompleteService {
 
     @Override
     public Integer save(ShopComplete shopComplete) {
+        String currentShopBasicId = SysUserUtil.getCurrentShopBasicId();
+        if(Strings.isNullOrEmpty(currentShopBasicId)) throw new BaseException("拒绝操作：非商家用户");
         shopCompleteNoNull(shopComplete);
+        shopComplete.setShopBasicId(currentShopBasicId);
         ShopAudit shopAudit = shopComplete.getShopAudit();
         shopAudit.setId(UuidUtil.get32UUID());
         shopAuditNoNull(shopAudit);

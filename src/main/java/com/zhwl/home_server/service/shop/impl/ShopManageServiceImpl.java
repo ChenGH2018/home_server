@@ -78,6 +78,7 @@ public class ShopManageServiceImpl implements ShopManageService {
         sysUser.setUsername(shopBasic.getEmail());//邮箱作为用户名
         sysUser.setUserType(UserTypeEnum.SHOPUSER.ordinal());//用户类型
         sysUser.setAddTime(new Date());
+        sysUser.setName(shopRegistry.getShopBasic().getEnterpriseName());
 //        sysUser.setIsFreeze(0); //未冻结
 //        sysUser.setIsLogout(0); //未注销
         shopBasic.setId(UuidUtil.get32UUID());

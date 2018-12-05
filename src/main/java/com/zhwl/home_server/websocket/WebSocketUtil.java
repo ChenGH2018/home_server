@@ -1,6 +1,9 @@
 package com.zhwl.home_server.websocket;
 
+import com.zhwl.home_server.bean.shopaudit.ShopAudit;
 import com.zhwl.home_server.bean.socketmessage.ComponentMessage;
+import com.zhwl.home_server.service.shopaudit.ShopAuditService;
+import com.zhwl.home_server.util.SysUserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,6 +18,9 @@ import java.util.concurrent.ConcurrentMap;
 public class WebSocketUtil {
 
     @Autowired
+    private ShopAuditService shopAuditService;
+
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
     public static ConcurrentMap<String, ComponentMessage> messageMaps = new ConcurrentHashMap<>();
 
@@ -22,6 +28,7 @@ public class WebSocketUtil {
     public Boolean sendAdminTopicMessage(ComponentMessage message) {
         if(initComponentMessage(message)){
             messagingTemplate.convertAndSend("/topic/shopAudit", messageMaps.get(message.getComponentUrl()));
+            messagingTemplate.
             return true;
         }
         return false;
@@ -58,5 +65,20 @@ public class WebSocketUtil {
         componentMessage.setParentComponentUrl("/");
         return sendAdminTopicMessage(componentMessage);
     }
-
+    //审核之后消息处理
+    public Boolean postShopAuditMessage(ShopAudit shopAudit){
+        sendShopAuditMessage(-1);
+        ShopAudit shopAudit1 = shopAuditService.selectById(shopAudit.getId());
+        ComponentMessage componentMessage = new ComponentMessage();
+        componentMessage.setUnprocessedMessage(1);
+        componentMessage.setComponent("businessAudit");
+        componentMessage.setMenuName("商家审核");
+        componentMessage.setComponentUrl("/shopAudit/**");
+        componentMessage.setParentComponent("Home");
+        componentMessage.setParentMenuName("商家管理");
+        componentMessage.setParentComponentUrl("/");
+        messageMaps.put(shopAudit1.getShopBasic().getSysUser().getUsername(),);
+    }
+    //发送商家审核通知
+    public Boolean sendShop
 }

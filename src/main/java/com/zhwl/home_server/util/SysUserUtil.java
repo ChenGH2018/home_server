@@ -1,5 +1,6 @@
 package com.zhwl.home_server.util;
 
+import com.google.common.base.Strings;
 import com.zhwl.home_server.bean.shop.ShopBasic;
 import com.zhwl.home_server.bean.system.SysUser;
 import com.zhwl.home_server.service.shop.ShopBasicService;
@@ -29,6 +30,12 @@ public class SysUserUtil {
         } else {
             return new SysUser();
         }
+    }
+
+    public static SysUser getNonNullUser() {
+        SysUser currentUser = getCurrentUser();
+        if(Strings.isNullOrEmpty(currentUser.getUsername())) return null;
+        return currentUser;
     }
 
     public static ShopBasic getCurrentShopBasic() {

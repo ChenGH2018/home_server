@@ -23,7 +23,7 @@
     </sql>
 
     <resultMap id="BaseResultMap" type="ShopAudit">
-        <id column="id" property="id"/>
+        <id column="sa_id" property="id"/>
         <result column="shop_complete_id" property="shopCompleteId"/>
         <result column="application_person" property="applicationPerson"/>
         <result column="application_time" property="applicationTime"/>
@@ -32,6 +32,12 @@
         <result column="audit_opinion" property="auditOpinion"/>
         <result column="audit_time" property="auditTime"/>
         <result column="audit_result" property="auditResult"/>
+        <association property="shopBasic" javaType="ShopBasic" autoMapping="true">
+            <result column="sb_id" property="id"/>
+        </association>
+        <association property="shopComplete" javaType="ShopComplete" autoMapping="true">
+            <result column="sc_id" property="id"/>
+        </association>
     </resultMap>
 
     <!-- 新增-->
@@ -79,29 +85,38 @@
     </update>
 
     <!--条件查询-->
-    <select id="selectBySelective" parameterType="ShopAudit" resultType="ShopAudit">
-        select
-        <include refid="Field"></include>
+    <select id="selectBySelective" parameterType="ShopAudit" resultMap="BaseResultMap">
+        select sa.shop_complete_id, sa.application_person, sa.application_time, sa.application_description, sa.audit_status, sa.audit_opinion, sa.audit_time, sa.audit_result, sa.id AS sa_id,
+        <!--<if test="isQueryBasic" >sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id,</if>-->
+        sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id,
+        <!--<if test="isQueryComplete">sb.email,sb.country,sb.enterprise_name,sb.enterprise_address,sb.contact_person,sb.contact_phone,sb.is_freeze,sb.is_logout,sb.audit_status,sb.register_time,sb.sys_user_id,sb.id AS sb_id</if>-->
+        sb.email,sb.country,sb.enterprise_name,sb.enterprise_address,sb.contact_person,sb.contact_phone,sb.is_freeze,sb.is_logout,sb.register_time,sb.sys_user_id,sb.id AS sb_id
         from
-        <include refid="tableName"></include>
+        <!--t_shop_audit AS sa <if test="isQueryComplete">LEFT JOIN t_shop_complete AS sc ON sa.shop_complete_id = sc.id</if> <if test="isQueryComplete">LEFT JOIN t_shop_basic AS sb ON sc.shop_basic_id = sb.id</if>-->
+        t_shop_audit AS sa LEFT JOIN t_shop_complete AS sc ON sa.shop_complete_id = sc.id LEFT JOIN t_shop_basic AS sb ON sc.shop_basic_id = sb.id
         <where>
-            <if test="shopCompleteId != null">AND shop_complete_id=#{shopCompleteId}</if>
-            <if test="applicationPerson != null">AND application_person=#{applicationPerson}</if>
-            <if test="applicationTime != null">AND application_time=#{applicationTime}</if>
+            <if test="shopCompleteId != null">AND sa.shop_complete_id=#{shopCompleteId}</if>
+            <if test="applicationPerson != null">AND sa.application_person=#{applicationPerson}</if>
+            <if test="applicationTime != null">AND sa.application_time=#{applicationTime}</if>
             <if test="applicationDescription != null">AND application_description=#{applicationDescription}</if>
-            <if test="auditStatus != null">AND audit_status=#{auditStatus}</if>
-            <if test="auditOpinion != null">AND audit_opinion=#{auditOpinion}</if>
-            <if test="auditTime != null">AND audit_time=#{auditTime}</if>
-            <if test="auditResult != null">AND audit_result=#{auditResult}</if>
-            <if test="id != null">AND id=#{id}</if>
+            <if test="auditStatus != null">AND sa.audit_status=#{auditStatus}</if>
+            <if test="auditOpinion != null">AND sa.audit_opinion=#{auditOpinion}</if>
+            <if test="auditTime != null">AND sa.audit_time=#{auditTime}</if>
+            <if test="auditResult != null">AND sa.audit_result=#{auditResult}</if>
+            <if test="id != null">AND sa.id=#{id}</if>
         </where>
     </select>
 
     <!--条件查询-->
-    <select id="getShopAuditByPage" parameterType="Page" resultType="ShopAudit">
-        select sa.shop_complete_id, sa.application_person, sa.application_time, sa.application_description, sa.audit_status, sa.audit_opinion, sa.audit_time, sa.audit_result,id
+    <select id="getShopAuditByPage" parameterType="Page" resultMap="BaseResultMap">
+        select sa.shop_complete_id, sa.application_person, sa.application_time, sa.application_description, sa.audit_status, sa.audit_opinion, sa.audit_time, sa.audit_result, sa.id AS sa_id,
+        <!--<if test="isQueryBasic" >sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id,</if>-->
+        sc.shop_basic_id,sc.shop_name,sc.company_homepage,sc.company_type,sc.business_registration_number,sc.unified_social_credit_code,sc.registered_address,sc.registered_capital,sc.establishment_date,sc.business_period_begins,sc.business_period_end,sc.fixed_telephone,sc.legal_representative,sc.business_license_url,sc.id AS sc_id,
+        <!--<if test="isQueryComplete">sb.email,sb.country,sb.enterprise_name,sb.enterprise_address,sb.contact_person,sb.contact_phone,sb.is_freeze,sb.is_logout,sb.audit_status,sb.register_time,sb.sys_user_id,sb.id AS sb_id</if>-->
+        sb.email,sb.country,sb.enterprise_name,sb.enterprise_address,sb.contact_person,sb.contact_phone,sb.is_freeze,sb.is_logout,sb.register_time,sb.sys_user_id,sb.id AS sb_id
         from
-        <include refid="tableName"/> AS sa
+        <!--t_shop_audit AS sa <if test="isQueryComplete">LEFT JOIN t_shop_complete AS sc ON sa.shop_complete_id = sc.id</if> <if test="isQueryComplete">LEFT JOIN t_shop_basic AS sb ON sc.shop_basic_id = sb.id</if>-->
+        t_shop_audit AS sa LEFT JOIN t_shop_complete AS sc ON sa.shop_complete_id = sc.id LEFT JOIN t_shop_basic AS sb ON sc.shop_basic_id = sb.id
         <where>
             <if test="pd.entity.shopCompleteId != null">AND sa.shop_complete_id=#{pd.entity.shopCompleteId}</if>
             <if test="pd.entity.applicationPerson != null">AND sa.application_person=#{pd.entity.applicationPerson}</if>
@@ -139,7 +154,7 @@
     <!--批量删除操作-->
     <delete id="deleteArray" parameterType="String">
         delete <include refid="tableName"/> ,t_shop_complete from
-        <include refid="tableName"/> LEFT JOIN t_shop_complete ON <include refid="tab   leName"/>.shop_complete_id = t_shop_complete.id
+        <include refid="tableName"/> LEFT JOIN t_shop_complete ON <include refid="tableName"/>.shop_complete_id = t_shop_complete.id
         where
         <include refid="tableName"/>.id in
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
